@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+    <title>Key test</title>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script>
+		$(document).ready(function () {
+			$("html").keypress(function (e) {
+				console.log(e.originalEvent);
+				var texts = [
+					"KeyCode: " + e.originalEvent.keyCode,
+					"CharCode: " + e.originalEvent.charCode,
+					"Key: '" + e.originalEvent.key + "'"
+				]
+				$('ul').append("<li>" + texts.join(', ') + "</li>");
+			});
+		});
+    </script>
+</head>
+<body>
+<p><strong>Info:</strong> pressed keys will be displayed below.</p>
+<ul>
+
+</ul>
+</body>
+</html>

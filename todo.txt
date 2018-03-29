@@ -1,0 +1,4 @@
+Planned changes:
+ - ALlow controls with numpad even with disabled numlock
+ - Allow solo play
+ - Allow room selection

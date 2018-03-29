@@ -1,0 +1,9 @@
+.test-env
+config.json
+.history
+
+node_modules
+*.iml
+.idea
+
+backend/_recordStore
