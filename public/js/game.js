@@ -3,21 +3,13 @@
 // }
 
 function getGameLogic(emit) {
-	var x;
-	var y;
-
 	var audio = new Audio('notification.wav?v=2');
 	var queryParams = ['version=' + GAME_VERSION];
 	var myName = "Player #" + Date.now();
 
 	queryParams.push('name=' + myName);
 
-	var $gameGrid = $('#gameGrid');
-	var $transparentLayer = $('#tLayer');
-	var $topLayer = $('#topLayer');
 	var $log = $('#log');
-	var $oLayer = [];
-	var $fLayer = [];
 	var $emoteYou = $('#messageYou');
 	var $emotePartner = $('#messageOther');
 	var $customEmoteInput = $("#custom-emote-input");
@@ -37,29 +29,58 @@ function getGameLogic(emit) {
 	var isPlayerDead = [false, false];
 
 
-	for (var x = 0; x < GAME_WIDTH; x++) {
-		$oLayer[x] = [];
-		$fLayer[x] = [];
-	}
 
-	for (y = 0; y < GAME_HEIGHT; y++) {
-		for (x = 0; x < GAME_WIDTH; x++) {
-			var $oItem = $("<div class='cell'><div class='f'></div></div>");
-			var $fItem = $oItem.find('.f');
+	const sharedRenderer = {
+		clearTopLayer: function() {
+			HTML_RENDERER.clearTopLayer();
+			CANVAS_RENDERER.clearTopLayer();
+		},
 
-			$gameGrid.append($oItem);
-			$oLayer[x][y] = $oItem;
-			$fLayer[x][y] = $fItem;
+		clearTransparentLayer: function() {
+			HTML_RENDERER.clearTransparentLayer();
+			CANVAS_RENDERER.clearTransparentLayer();
+		},
+
+		clearFLayer: function() {
+			HTML_RENDERER.clearFLayer();
+			CANVAS_RENDERER.clearFLayer();
+		},
+
+		clearGhosts: function() {
+			HTML_RENDERER.clearGhosts();
+			CANVAS_RENDERER.clearGhosts();
+		},
+
+		oLayerDraw: function(x, y, spriteX, spriteY) {
+			HTML_RENDERER.oLayerDraw(x, y, spriteX, spriteY);
+			CANVAS_RENDERER.oLayerDraw(x, y, spriteX, spriteY);
+		},
+
+		fLayerDraw: function(x, y, spriteX, spriteY) {
+			HTML_RENDERER.fLayerDraw(x, y, spriteX, spriteY);
+			CANVAS_RENDERER.fLayerDraw(x, y, spriteX, spriteY);
+		},
+
+		topLayerDraw: function(x, y, spriteX, spriteY, opacity, classes, opts) {
+			HTML_RENDERER.topLayerDraw(x, y, spriteX, spriteY, opacity, classes, opts);
+			CANVAS_RENDERER.topLayerDraw(x, y, spriteX, spriteY, opacity, classes, opts);
+		},
+
+		transparentLayerDraw: function(x, y, spriteX, spriteY, opacity, classes) {
+			HTML_RENDERER.transparentLayerDraw(x, y, spriteX, spriteY, opacity, classes);
+			CANVAS_RENDERER.transparentLayerDraw(x, y, spriteX, spriteY, opacity, classes);
 		}
 	}
 
+	const renders = CANVAS_RENDERER;
+
 	logMessage("Game initialized");
-	renderer.renderRoom(oLayerDraw, fLayerDraw, transparentLayerDraw, generatePitLevel());
+	renderer.renderRoom(renders.oLayerDraw, renders.fLayerDraw, renders.transparentLayerDraw, generatePitLevel());
 
 	const onConnect = () => {
-		clearTopLayer();
-		clearTransparentLayer();
-		clearFLayer();
+		renders.clearTopLayer();
+		renders.clearTransparentLayer();
+		renders.clearFLayer();
 
 		$customEmoteInput.on('keypress', _onKeyPress);
 		$customEmoteSend.on('click', _onCustomEmoteClick);
@@ -69,7 +90,7 @@ function getGameLogic(emit) {
 		updateMove(null, true);
 		updateMove(null, false);
 		updateFriendName(null);
-		renderer.renderRoom(oLayerDraw, fLayerDraw, transparentLayerDraw, generatePitLevel());
+		renderer.renderRoom(renders.oLayerDraw, renders.fLayerDraw, renders.transparentLayerDraw, generatePitLevel());
 		logMessage("Connected to the server");
 	};
 
@@ -79,16 +100,16 @@ function getGameLogic(emit) {
 		$customEmoteSend.off('click', _onCustomEmoteClick);
 		$("html").off('keydown', _onHtmlKeypress);
 
-		clearTopLayer();
-		clearTransparentLayer();
-		clearFLayer();
+		renders.clearTopLayer();
+		renders.clearTransparentLayer();
+		renders.clearFLayer();
 		logMessage("Lost connection with the server...");
 		isPlayerDead[0] = false;
 		isPlayerDead[1] = false;
 		updateMove(null, true);
 		updateMove(null, false);
 		updateFriendName(null);
-		renderer.renderRoom(oLayerDraw, fLayerDraw, transparentLayerDraw, generatePitLevel());
+		renderer.renderRoom(renders.oLayerDraw, renders.fLayerDraw, renders.transparentLayerDraw, generatePitLevel());
 	};
 
 	const onData = data => {
@@ -128,7 +149,7 @@ function getGameLogic(emit) {
 					break;
 				}
 				if (data.turn == currentTurn) {
-					clearGhosts();
+					renders.clearGhosts();
 					friendMoveQueue = data.queue;
 					updateMove(data.move <= 10 ? 103 : data.move, false);
 				}
@@ -138,15 +159,15 @@ function getGameLogic(emit) {
 				currentTurn = data.room.turn;
 				currentPlayer = data.order;
 
-				clearTopLayer();
-				clearFLayer();
-				clearTransparentLayer();
-				clearGhosts();
+				renders.clearTopLayer();
+				renders.clearFLayer();
+				renders.clearTransparentLayer();
+				renders.clearGhosts();
 				logMessage("Playing '" + data.room.name + "'");
 				isPlayerDead[0] = false;
 				isPlayerDead[1] = false;
-				renderer.renderRoom(oLayerDraw, fLayerDraw, transparentLayerDraw, data.room);
-				renderer.renderTopLayer(topLayerDraw, data.room, currentPlayer);
+				renderer.renderRoom(renders.oLayerDraw, renders.fLayerDraw, renders.transparentLayerDraw, data.room);
+				renderer.renderTopLayer(renders.topLayerDraw, data.room, currentPlayer);
 				yourPosition = data.room.players[currentPlayer];
 				friendPosition = data.room.players[1-currentPlayer];
 				updateTurnValue(data.room.turn);
@@ -160,13 +181,13 @@ function getGameLogic(emit) {
 				currentTurn = data.room.turn;
 
 				if (data.room.wasBusy) {
-					clearFLayer();
-					clearTransparentLayer();
-					renderer.renderRoom(oLayerDraw, fLayerDraw, transparentLayerDraw, data.room);
+					renders.clearFLayer();
+					renders.clearTransparentLayer();
+					renderer.renderRoom(renders.oLayerDraw, renders.fLayerDraw, renders.transparentLayerDraw, data.room);
 				}
 
-				clearTopLayer();
-				renderer.renderTopLayer(topLayerDraw, data.room, currentPlayer);
+				renders.clearTopLayer();
+				renderer.renderTopLayer(renders.topLayerDraw, data.room, currentPlayer);
 				yourPosition = data.room.players[currentPlayer];
 				friendPosition = data.room.players[1-currentPlayer];
 				updateTurnValue(data.room.turn);
@@ -249,7 +270,7 @@ function getGameLogic(emit) {
 				return;
 			}
 
-			clearGhosts();
+			renders.clearGhosts();
 			updateMove(move, true);
 			emitCurrentMove(move);
 			return false;
@@ -264,95 +285,6 @@ function getGameLogic(emit) {
 			queue: yourMoveQueue,
 			turn: currentTurn
 		});
-	}
-
-	function clearTopLayer() {
-		$topLayer.empty();
-	}
-
-	function clearTransparentLayer() {
-		$transparentLayer.empty();
-	}
-
-	function clearFLayer() {
-		$gameGrid.find('.f').attr('class', 'f');
-	}
-
-	function clearGhosts() {
-		$gameGrid.find('.item.ghost').remove();
-	}
-
-	function oLayerDraw(x, y, spriteX, spriteY) {
-		if (typeof spriteX === "undefined") {
-			spriteY = y.y;
-			spriteX = y.x;
-			y = x.y;
-			x = x.x
-		}
-
-		$oLayer[x][y][0].className = "cell g" + spriteX + "x" + spriteY;
-	}
-
-	function fLayerDraw(x, y, spriteX, spriteY) {
-		if (typeof spriteX === "undefined") {
-			spriteY = y.y;
-			spriteX = y.x;
-			y = x.y;
-			x = x.x
-		}
-
-		$fLayer[x][y][0].className = "f g" + spriteX + "x" + spriteY;
-	}
-
-	function topLayerDraw(x, y, spriteX, spriteY, opacity, classes, opts) {
-		if (typeof spriteX === "undefined") {
-			classes = y.classes || [];
-			opacity = y.opacity || 1;
-			spriteY = y.y;
-			spriteX = y.x;
-			y = x.y;
-			x = x.x
-		}
-
-		opts = opts || {};
-
-		var style = "";
-		if (opts.precise) {
-			style = "left: " + x + "px;"
-				+ "top: " + y + "px;";
-		} else {
-			classes.push("p" + x + "x" + y);
-		}
-		classes.push("g" + spriteX + "x" + spriteY);
-
-		if (opacity != 1) {
-			classes.push("o" + (opacity * 10).toFixed(0));
-		}
-
-		$topLayer.append('<div'
-			+ ' class="item ' + classes.join(" ") + '"'
-			+ (style ? ' style="'+style+'"' : '')
-			+ '></div>');
-	}
-
-	function transparentLayerDraw(x, y, spriteX, spriteY, opacity, classes) {
-		if (typeof spriteX === "undefined") {
-			classes = y.classes || [];
-			opacity = y.opacity || 1;
-			spriteY = y.y;
-			spriteX = y.x;
-			y = x.y;
-			x = x.x
-		}
-
-		classes.push("p" + x + "x" + y);
-		classes.push("g" + spriteX + "x" + spriteY);
-
-		if (opacity != 1) {
-			classes.push("o" + (opacity * 10).toFixed(0));
-		}
-
-		$transparentLayer.append('<div class="item ' + classes.join(" ") + '"></div>');
 	}
 
 	function updateTurnValue(value) {
@@ -390,7 +322,8 @@ function getGameLogic(emit) {
 			queue.length = 0;
 		}
 
-		renderer.renderGhost(topLayerDraw, position, queue, isYou);
+		renderer.renderGhost(renders.topLayerDraw, position, queue, isYou);
+		CANVAS_RENDERER.refreshMainLayer();
 
 		var $div = isYou ? $("#move-you") : $("#move-partner");
 		var $move = $div.find('.move');

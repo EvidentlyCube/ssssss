@@ -9,7 +9,7 @@ const VIEW_GAME = (function () {
         switch (data.type) {
             case 'alone':
                 VIEWS.showPlayers();
-                break;
+                break;Ą
         }
     }
 

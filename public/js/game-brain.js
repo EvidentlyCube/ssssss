@@ -1,5 +1,5 @@
 const CompleteRoomNamesSave = 'completed_level_names';
-const completedRooms = localStorage.getItem(CompleteRoomNamesSave) || [];
+const completedRooms = Array.isArray(localStorage.getItem(CompleteRoomNamesSave)) ? localStorage.getItem(CompleteRoomNamesSave) : [];
 
 const GAME_BRAIN = (function () {
     const onData = data => {
@@ -21,7 +21,6 @@ const GAME_BRAIN = (function () {
                 GAME_BRAIN.isPlaying = false;
                 break;
             case 'roomCompleted':
-                console.log("roomCompleted", data);
                 completedRooms.push(data.roomName);
                 localStorage.setItem(CompleteRoomNamesSave, completedRooms);
                 break;

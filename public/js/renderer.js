@@ -43,6 +43,7 @@ var renderer = {
 				}
 			}
 		}
+		CANVAS_RENDERER.refreshMainLayer();
 	},
 
 	renderTopLayer: function (topLayerDraw, roomData, currentPlayerId) {
@@ -76,6 +77,7 @@ var renderer = {
 
 		topLayerDraw(roomData.players[currentPlayerId].sword, getBeethroSwordTile(roomData.players[currentPlayerId].o, roomData.players[currentPlayerId].isDead ? 0.3 : 1));
 		topLayerDraw(roomData.players[otherPlayerId].sword, getGuardSwordTile(roomData.players[otherPlayerId].o, roomData.players[otherPlayerId].isDead ? 0.3 : 1));
+		CANVAS_RENDERER.refreshMainLayer();
 	},
 
 	renderGhost: function (topLayerDraw, position, moveQueue, isYou) {
