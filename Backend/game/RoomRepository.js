@@ -3,7 +3,7 @@ const HoldLoader = require('./holdLoader/HoldLoader');
 const Room = require('./Room');
 const Utils = require('./Utils');
 
-const roomsDatabase = loadHolds(['skell', 'skell_2', 'navithmastero', 'kieran_millar_2', 'mauvebutterfly', 'doom', 'xindaris']);
+const roomsDatabase = loadHolds(['official_levelset']);
 // const roomsDatabase = loadHolds(['test']);
 
 // HoldLoader.load(`${__dirname}/../bup.hold`);
@@ -13,7 +13,7 @@ const roomsDatabase = loadHolds(['skell', 'skell_2', 'navithmastero', 'kieran_mi
 function loadHolds(names){
 	const rooms = [];
 	names.forEach(name => {
-		rooms.push.apply(rooms, HoldLoader.load(`${__dirname}/../levels_${name}.hold`));
+		rooms.push.apply(rooms, HoldLoader.load(`${__dirname}/../${name}.hold`));
 	});
 
 	Utils.shuffleArray(rooms);

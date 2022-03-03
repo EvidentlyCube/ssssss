@@ -15,10 +15,27 @@ module.exports = {
 		const result = zlib.inflateSync(buffer);
 
 		const hold = new DOMParser().parseFromString(result.toString());
-		const author = Buffer.from(xpath.select('//Holds', hold)[0].getAttribute('DescriptionMessage'), 'base64').toString().replace(/(.)./g, '$1');
+		const levelAuthors = new Map();
+		Array.from(xpath.select('//Levels', hold)).forEach(x => {
+			levelAuthors.set(
+				x.getAttribute('LevelID'),
+				Buffer.from(x.getAttribute('NameMessage'), 'base64')
+					.toString()
+					.replace(/(.)./g, '$1')
+					.replace(/\[.+?\]/g, '')
+					.trim()
+			);
+		});
+
 		const rooms = xpath.select("//Rooms", hold);
 
-		return rooms.map(x => loadRoom(x, author)).filter(room => room.monsters.length > 0);
+		return rooms.map(x => {
+			const levelId = x.getAttribute('LevelID');
+			const author = levelAuthors.get(levelId);
+
+			return loadRoom(x, author);
+		})
+		.filter(room => room.monsters.length > 0 && room.author);
 	}
 };
 
