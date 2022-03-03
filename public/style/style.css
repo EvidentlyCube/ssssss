@@ -448,6 +448,7 @@ hr {
 #version a {
     text-decoration: underline;
     cursor: pointer;
+    color: white;
 }
 
 #version a:hover {
