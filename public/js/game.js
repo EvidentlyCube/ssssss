@@ -304,7 +304,7 @@ function getGameLogic(emit) {
 		$fLayer[x][y][0].className = "f g" + spriteX + "x" + spriteY;
 	}
 
-	function topLayerDraw(x, y, spriteX, spriteY, opacity, classes) {
+	function topLayerDraw(x, y, spriteX, spriteY, opacity, classes, opts) {
 		if (typeof spriteX === "undefined") {
 			classes = y.classes || [];
 			opacity = y.opacity || 1;
@@ -314,14 +314,25 @@ function getGameLogic(emit) {
 			x = x.x
 		}
 
-		classes.push("p" + x + "x" + y);
+		opts = opts || {};
+
+		var style = "";
+		if (opts.precise) {
+			style = "left: " + x + "px;"
+				+ "top: " + y + "px;";
+		} else {
+			classes.push("p" + x + "x" + y);
+		}
 		classes.push("g" + spriteX + "x" + spriteY);
 
 		if (opacity != 1) {
 			classes.push("o" + (opacity * 10).toFixed(0));
 		}
 
-		$topLayer.append('<div class="item ' + classes.join(" ") + '"></div>');
+		$topLayer.append('<div'
+			+ ' class="item ' + classes.join(" ") + '"'
+			+ (style ? ' style="'+style+'"' : '')
+			+ '></div>');
 	}
 
 	function transparentLayerDraw(x, y, spriteX, spriteY, opacity, classes) {

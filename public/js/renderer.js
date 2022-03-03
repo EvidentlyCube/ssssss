@@ -87,6 +87,8 @@ var renderer = {
 		var y = position.y;
 		var o = position.o;
 
+		var consecutiveWaits = 0;
+
 		for (let i = 0; i < moveQueue.length; i++) {
 			var move = moveQueue[i];
 			x = x + DIR_X_MAP[move];
@@ -100,6 +102,21 @@ var renderer = {
 				);
 
 			var offset;
+
+			if (move === 4) {
+				offset = getSleepTile();
+				topLayerDraw(
+					(x + 0.5) * TILE_EDGE - Math.floor(consecutiveWaits / 10) * 8,
+					(y - 0.5) * TILE_EDGE + (consecutiveWaits % 10) * 8,
+					offset.x,
+					offset.y,
+					1, ['ghost'], {precise: true}
+				)
+				consecutiveWaits++
+				continue;
+			}
+
+			consecutiveWaits = 0;
 
 			if (move < 9) {
 				offset = isYou ? getBeethroTile(o) : getGuardTile(o);
@@ -579,6 +596,10 @@ function getRockGolemPileTile() {
 
 function getRoachEggTile(o) {
 	return {x: 4 + o, y: 0};
+}
+
+function getSleepTile() {
+	return {x: 0, y: 8};
 }
 
 
