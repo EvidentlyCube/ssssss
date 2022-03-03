@@ -3,40 +3,66 @@
 
 <head>
     <title>Woooo mystery</title>
-    <link rel="stylesheet" type="text/css" href="style/style.css?v=1.0.0">
-    <script src="js/log.js?v=1.0.0"></script>
-    <script src="js/constants.js?v=1.0.0"></script>
+    <link rel="stylesheet" type="text/css" href="style/style.css?v=1.1.0">
+    <script src="js/log.js?v=1.1.0"></script>
+    <script src="js/constants.js?v=1.1.0"></script>
     <script>
-        const domReady = (callBack) => {
+        const domReady = (callback) => {
             if (document.readyState === "loading") {
-                document.addEventListener('DOMContentLoaded', callBack);
+                document.addEventListener('DOMContentLoaded', callback);
             }
             else {
-                callBack();
+                callback();
             }
         }
 
-        const windowReady = (callBack) => {
+        const windowReady = (callback) => {
             if (document.readyState === 'complete') {
-                callBack();
+                callback();
             }
             else {
-                window.addEventListener('load', callBack);
+                window.addEventListener('load', callback);
+            }
+        }
+
+        const gameComponents = {}
+        function queueGameComponent(name) {
+            gameComponents[name] = false;
+        }
+        function readyGameComponent(name) {
+            gameComponents[name] = true;
+            if (isGameReady()) {
+                document.dispatchEvent(new Event('game-ready'));
+            }
+        }
+        function isGameReady() {
+            var values = Object.values(gameComponents);
+
+            return values.length > 0 && values.filter(x => x !== true).length === 0;
+        }
+        const gameReady = (callback) => {
+            if (isGameReady()) {
+                callback();
+            } else {
+                document.addEventListener('game-ready', () => {
+                    callback()
+                })
             }
         }
     </script>
-    <script defer src="js/socket.io.js?v=1.0.0"></script>
-    <script defer src="js/jquery-3.3.1.min.js?v=1.0.0"></script>
-    <script defer src="js/signals.js?v=1.0.0"></script>
-    <script defer src="js/socket-api.js?v=1.0.0"></script>
-    <script defer src="js/cssGenerator.js?v=1.0.0"></script>
-    <script defer src="js/renderer.js?v=1.0.0"></script>
-    <script defer src="js/game.js?v=1.0.0"></script>
-    <script defer src="js/view-login.js?v=1.0.0"></script>
-    <script defer src="js/view-player-list.js?v=1.0.0"></script>
-    <script defer src="js/view-game.js?v=1.0.0"></script>
-    <script defer src="js/views.js?v=1.0.0"></script>
-    <script defer src="js/game-brain.js?v=1.0.0"></script>
+    <script defer src="js/socket.io.js?v=1.1.0"></script>
+    <script defer src="js/jquery-3.3.1.min.js?v=1.1.0"></script>
+    <script defer src="js/signals.js?v=1.1.0"></script>
+    <script defer src="js/socket-api.js?v=1.1.0"></script>
+    <script defer src="js/cssGenerator.js?v=1.1.0"></script>
+    <script defer src="js/renderer.js?v=1.1.0"></script>
+    <script defer src="js/renderer-canvas.js?v=1.1.0"></script>
+    <script defer src="js/game.js?v=1.1.0"></script>
+    <script defer src="js/view-login.js?v=1.1.0"></script>
+    <script defer src="js/view-player-list.js?v=1.1.0"></script>
+    <script defer src="js/view-game.js?v=1.1.0"></script>
+    <script defer src="js/views.js?v=1.1.0"></script>
+    <script defer src="js/game-brain.js?v=1.1.0"></script>
     <style>
         html,
         body {
@@ -122,7 +148,9 @@
                 $logo.style.opacity = opacity;
             });
 
-            windowReady(start);
+            windowReady(function() {
+                gameReady(start);
+            });
         });
 
         const start = async () => {
@@ -355,6 +383,7 @@
                 <div id="gameGrid">
                     <div id="topLayer"></div>
                     <div id="tLayer"></div>
+                    <canvas id="canvas-renderer"></canvas>
                     <div id="messageOther" class="message-box">Partner: IAH O</div>
                     <div id="messageYou" class="message-box">You: O HAI</div>
                 </div>
@@ -389,8 +418,6 @@
                 <code>S</code> - request swap<br>
                 <code>Escape</code> - return to player list<br>
                 <code>Backspace</code> - undo queued move<br>
-
-
             </div>
         </div>
     </div>
@@ -409,9 +436,10 @@
         <a class="close-info-box">Close</a>
         <div>
             <h3>Changelog</h3>
-            <h4>Version 1.0.1 (TBD)</h4>
+            <h4>Version 1.1.0 (2022-03-03)</h4>
             <ul>
                 <li><strong>New feature:</strong> An icon appears when queueing wait moves.</li>
+                <li><strong>New feature:</strong> Canvas-based renderer fixed the issue with lines drawn between tiles.</li>
                 <li><strong>Bugfix:</strong> Fixed a server crash which happened when all rooms wre completed.</li>
                 <li><strong>Bugfix:</strong> Tar should now render correctly in all cases.</li>
             </ul>
