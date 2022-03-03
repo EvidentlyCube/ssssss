@@ -5,6 +5,16 @@ If you've never played DROD before it might be a little tough, since the difficu
 
 You can play the game here: https://ssssss.evidentlycube.com
 
+## How to run it locally
+
+1. Clone the repository
+2. Run `npm i`
+3. Copy `config.example.json` to `config.json` and update the settings
+4. Run `node app.js`
+5. Open `localhost:3000` in two tabs in your browser of choice
+
+There is no automatic server restart on change, so you need to hit `Ctrl+C` to kill it and run `node app.js` again to restart it.
+
 ## History
 
 Originally the project was called DROD Online and was released on [Caravel Games forums](https://forum.caravelgames.com/) on
