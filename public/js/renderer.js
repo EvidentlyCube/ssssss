@@ -265,25 +265,9 @@ function getDoorOffset_inner(x, y, tiles, type1, type2) {
 function getTarOffset(x, y, tarType, tiles){
 	var bytes = getSurroundingByte(x, y, tarType, tiles, false);
 
-
 	// Completely surrounded
 	if (bytes == 0xFF) {
 		return TAR_OFFSETS.NSEW1234;
-	}
-
-
-	// Corners
-	if ((bytes & 0xEA) == 0xE0) {
-		return TAR_OFFSETS.SE4;
-	}
-	if ((bytes & 0xBA) == 0x38) {
-		return TAR_OFFSETS.SW3;
-	}
-	if ((bytes & 0xAE) == 0x0E) {
-		return TAR_OFFSETS.NW1;
-	}
-	if ((bytes & 0xAB) == 0x83) {
-		return TAR_OFFSETS.NE2;
 	}
 
 	// Sides
@@ -319,6 +303,21 @@ function getTarOffset(x, y, tarType, tiles){
 	}
 	if (bytes == 0xEE) {
 		return TAR_OFFSETS.NSEW14;
+	}
+
+
+	// Corners
+	if ((bytes & 0xE0) == 0xE0) {
+		return TAR_OFFSETS.SE4;
+	}
+	if ((bytes & 0x38) == 0x38) {
+		return TAR_OFFSETS.SW3;
+	}
+	if ((bytes & 0x0E) == 0x0E) {
+		return TAR_OFFSETS.NW1;
+	}
+	if ((bytes & 0x83) == 0x83) {
+		return TAR_OFFSETS.NE2;
 	}
 
 	return TAR_OFFSETS._0;
