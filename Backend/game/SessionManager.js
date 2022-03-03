@@ -475,9 +475,9 @@ function storeRoomCompleted(session) {
 			}
 
 			if (!didCompleteBefore && RecordStore.hasEverythingCompleted(player.completedRoomNames)) {
-				setTimeout(function () {
-					sendMessageToChat(`Congratulations ${player.name}! You have completed all of the rooms in DROD Online!`);
-				}, 5000);
+				// setTimeout(function () {
+					// sendMessageToChat(`Congratulations ${player.name}! You have completed all of the rooms in DROD Online!`);
+				// }, 5000);
 			}
 		}
 	});
