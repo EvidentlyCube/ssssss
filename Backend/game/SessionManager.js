@@ -186,29 +186,13 @@ const SessionManager = {
 			return;
 		}
 
-		const ps = [];
-		ps.push(...activePlayers);
-		ps.push(...activePlayers);
-		ps.push(...activePlayers);
-		ps.push(...activePlayers);
-		ps.push(...activePlayers);
-		ps.push(...activePlayers);
-		ps.push(...activePlayers);
-		ps.push(...activePlayers);
-		ps.push(...activePlayers);
-		ps.push(...activePlayers);
-		ps.push(...activePlayers);
-		ps.push(...activePlayers);
-		ps.push(...activePlayers);
-		ps.push(...activePlayers);
-		ps.push(...activePlayers);
-		ps.push(...activePlayers);
-
 		this.emit(socket, 'data', {
 			type: 'playerList',
-			players: ps.map(p => ({
+			players: activePlayers.map(p => ({
 				name: p.name,
-				completedRooms: p.completedRoomNames.length,
+				completedRooms: Constants.Debug.RandomizeRoomCompletionInList
+					? Math.floor(Math.random() * RecordStore.getRooms().length)
+					: p.completedRoomNames.length,
 				invited: player.inviting === p.name,
 				inviting: p.inviting === player.name,
 				busy: !!p.session
@@ -509,6 +493,12 @@ function storeRoomCompleted(session) {
 
 	playerNameToTimestampUntilNextMessage[playerNames[0]] = time + 1000 * 60 * 60;
 	playerNameToTimestampUntilNextMessage[playerNames[1]] = time + 1000 * 60 * 60;
+}
+
+if (Constants.Debug.AddFakePlayersToList) {
+	for (let i = 0; i < 25; i++) {
+		SessionManager.connectPlayer(null, `Fake Player Number ${i+1}`);
+	}
 }
 
 module.exports = SessionManager;

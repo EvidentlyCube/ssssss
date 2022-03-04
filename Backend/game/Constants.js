@@ -19,6 +19,10 @@ module.exports = {
 	RoomWidth: 20,
 	RoomHeight: 20,
 	MoveNames: MoveNames,
+	Debug: {
+		AddFakePlayersToList: process.argv.indexOf("--spam-players") !== -1,
+		RandomizeRoomCompletionInList: process.argv.indexOf("--random-completion") !== -1,
+	},
 	TileTypes: {
 		Floor: 0,
 		Wall: 1,
