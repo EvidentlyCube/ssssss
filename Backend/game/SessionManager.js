@@ -190,6 +190,7 @@ const SessionManager = {
 			type: 'playerList',
 			players: activePlayers.map(p => ({
 				name: p.name,
+				completedLevels: p.completedLevels.length,
 				invited: player.inviting === p.name,
 				inviting: p.inviting === player.name,
 				busy: !!p.session
