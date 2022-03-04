@@ -81,9 +81,11 @@ html, body{
 
 #log{
     width: 400px;
+    height: 100vh;
     margin-left: 1em;
     font-size: 14px;
     color: white;
+    overflow-y: auto;
 }
 
 #log li:nth-child(2){
