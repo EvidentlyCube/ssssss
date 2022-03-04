@@ -156,7 +156,7 @@ var CANVAS_RENDERER = (function() {
 
 			transparentLayer.globalAlpha = opacity;
 			transparentLayer.drawImage(
-				wallTiles,
+				generalTiles,
 				spriteX * TILE_EDGE,
 				spriteY * TILE_EDGE,
 				TILE_EDGE,
