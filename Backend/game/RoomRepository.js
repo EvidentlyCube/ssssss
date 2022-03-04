@@ -71,6 +71,9 @@ const RoomRepository = {
 	},
 	getRoomNames: function(){
 		return roomsDatabase.map(room => room.name);
+	},
+	getRooms: function() {
+		return roomsDatabase;
 	}
 };
 

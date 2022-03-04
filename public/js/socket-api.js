@@ -45,6 +45,10 @@ const SOCKET_API = (function () {
             API.emit('setName', { name });
         },
 
+        getRooms: () => {
+            API.emit('get-rooms', { });
+        },
+
         invitePlayer: (name) => {
             API.emit('invite-send', { name });
         },

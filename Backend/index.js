@@ -44,7 +44,7 @@ function isInvalidVersion(data) {
 io.on('connection', function(socket){
 	const query = socket.request._query;
 	if (query.version != Constants.GameVersion){
-		socket.emit('data', {type: 'kill', explanation: `Game version mismatch, got '${query.version}' but expected '${Constants.GameVersion}'`});
+		SessionManager.emit(socket, 'kill', { rexplanation: `Game version mismatch, got '${query.version}' but expected '${Constants.GameVersion}'`});
 		return;
 	}
 
@@ -58,6 +58,19 @@ io.on('connection', function(socket){
 		}
 
 		SessionManager.connectPlayer(socket, data.name);
+	});
+
+	socket.on('get-rooms', function(data) {
+		if (isInvalidVersion(data)){
+			return;
+		}
+
+		SessionManager.emit(socket, 'data', { type: 'roomList', rooms: RecordStore.getRooms().map(x => {
+			return {
+				name: x.name,
+				author: x.author
+			}
+		})});
 	});
 
 	socket.on('set-completed-rooms', function(data) {

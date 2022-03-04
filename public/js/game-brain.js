@@ -20,6 +20,9 @@ const GAME_BRAIN = (function () {
                 GAME_BRAIN.friendName = null;
                 GAME_BRAIN.isPlaying = false;
                 break;
+            case 'roomList':
+                GAME_BRAIN.rooms = data.rooms;
+                break;
             case 'roomCompleted':
                 completedRooms.push(data.roomName);
                 localStorage.setItem(CompleteRoomNamesSave, completedRooms);
@@ -34,6 +37,7 @@ const GAME_BRAIN = (function () {
     };
 
     const onConnect = data => {
+        SOCKET_API.getRooms();
         document.querySelector('#connection-lost').style.display = 'none';
 
         if (GAME_BRAIN.playerName) {
@@ -54,6 +58,7 @@ const GAME_BRAIN = (function () {
     return {
         playerName: null,
         friendName: null,
+        rooms: [],
         isPlaying: false
     };
 })();

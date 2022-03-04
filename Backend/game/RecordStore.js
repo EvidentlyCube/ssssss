@@ -47,6 +47,9 @@ function cleanUpScores(scores){
 }
 
 module.exports = {
+	getRooms: function() {
+		return RoomRepository.getRooms();
+	},
 	hasEverythingCompleted: function(completedRoomNames){
 		return roomNames.filter(function(n) {
 			return completedRoomNames.indexOf(n) === -1;
