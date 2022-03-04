@@ -21,6 +21,13 @@ const GAME_BRAIN = (function () {
                 GAME_BRAIN.isPlaying = false;
                 break;
             case 'roomList':
+                data.rooms.sort((roomLeft, roomRight) => {
+                    let authorCompare = roomLeft.author.toLocaleUpperCase().localeCompare(roomRight.author.toLocaleUpperCase());
+
+                    return authorCompare === 0
+                        ? roomLeft.name.toLocaleUpperCase().localeCompare(roomRight.name.toLocaleUpperCase())
+                        : authorCompare;
+                });
                 GAME_BRAIN.rooms = data.rooms;
                 break;
             case 'roomCompleted':
@@ -59,6 +66,7 @@ const GAME_BRAIN = (function () {
         playerName: null,
         friendName: null,
         rooms: [],
-        isPlaying: false
+        isPlaying: false,
+        completedRooms: completedRooms
     };
 })();
