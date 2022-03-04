@@ -186,9 +186,27 @@ const SessionManager = {
 			return;
 		}
 
+		const ps = [];
+		ps.push(...activePlayers);
+		ps.push(...activePlayers);
+		ps.push(...activePlayers);
+		ps.push(...activePlayers);
+		ps.push(...activePlayers);
+		ps.push(...activePlayers);
+		ps.push(...activePlayers);
+		ps.push(...activePlayers);
+		ps.push(...activePlayers);
+		ps.push(...activePlayers);
+		ps.push(...activePlayers);
+		ps.push(...activePlayers);
+		ps.push(...activePlayers);
+		ps.push(...activePlayers);
+		ps.push(...activePlayers);
+		ps.push(...activePlayers);
+
 		this.emit(socket, 'data', {
 			type: 'playerList',
-			players: activePlayers.map(p => ({
+			players: ps.map(p => ({
 				name: p.name,
 				completedRooms: p.completedRoomNames.length,
 				invited: player.inviting === p.name,

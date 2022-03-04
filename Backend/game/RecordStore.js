@@ -1,27 +1,6 @@
-const Log = require('./Log');
-const fs = require('fs');
 const RoomRepository = require('./RoomRepository');
-const recordStorePath = __dirname + "/../_recordStore/record.store";
 
 const roomNames = RoomRepository.getRoomNames();
-const playerNameToCompletedRooms = importStore();
-
-function importStore(){
-	try {
-		const jsonString = fs.readFileSync(recordStorePath);
-		const data = JSON.parse(jsonString);
-
-		if (data){
-			Log(null, "CORE", "Loaded record store");
-		} else {
-			Log(null, "CORE", "Record store load failed");
-		}
-		return cleanUpScores(data) || {};
-	} catch (e){
-		Log(null, "CORE", `Loading scores failed: ${e.message}`);
-		return {};
-	}
-}
 
 function cleanUpScores(scores){
 	for (let playerName in scores){
