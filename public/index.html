@@ -368,13 +368,24 @@
         </form>
         <div id="view-players">
             <h3>List of players:</h3><br>
-            <div id="list-of-players">
-                <div class="player-row invited inviting busy">
-                    <div class="name">Skell 1</div>
-                    <button class="invite">Invite</button>
-                    <button class="uninvite">Uninvite</button>
-                    <button class="accept">Accept</button>
-                    <div class="playing">Busy playing...</div>
+            <div class="player-row header-row">
+                <div class="name">Name</div>
+                <div class="completion">Completed Rooms</div>
+                <div class="actions">Actions</div>
+            </div>
+            <div id="list-of-players-container">
+                <div id="list-of-players">
+                    <div class="header-bg"></div>
+                    <div class="player-row invited inviting busy">
+                        <div class="name">Skell 1</div>
+                        <div class="completion">3 / 54</div>
+                        <div class="actions">
+                            <button class="invite">Invite</button>
+                            <button class="uninvite">Uninvite</button>
+                            <button class="accept">Accept</button>
+                            <div class="playing">Busy playing...</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

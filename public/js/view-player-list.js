@@ -23,7 +23,7 @@ const VIEW_PLAYER_LIST = (function () {
             return;
         }
 
-        const row = e.target.parentElement;
+        const row = e.target.parentElement.parentElement;
         const playerName = row.querySelector('.name').innerText;
 
         if (e.target.className === 'invite') {
@@ -37,19 +37,23 @@ const VIEW_PLAYER_LIST = (function () {
         }
     }
 
-    const createPlayerRow = (name, invited, inviting, isBusy) => {
+    const createPlayerRow = (name, invited, inviting, isBusy, completed) => {
         const $div = document.createElement('div');
         $div.innerHTML = `
             <div class="name"></div>
-            <button class="invite">Invite</button>
-            <button class="uninvite">Uninvite</button>
-            <button class="accept">Accept</button>
-            <div class="playing">Busy playing...</div>`;
+            <div class="completion"></div>
+            <div class="actions">
+                <button class="invite">Invite</button>
+                <button class="uninvite">Uninvite</button>
+                <button class="accept">Accept</button>
+                <div class="playing">Busy playing...</div>
+            </div>`;
         $div.querySelector('.name').innerText = name;
+        $div.querySelector('.completion').innerText = completed + " / " + GAME_BRAIN.rooms.length;
         $div.classList.add('player-row');
         invited && $div.classList.add('invited');
         inviting && $div.classList.add('inviting');
-        isBusy && $div.classList.add('isBusy');
+        isBusy && $div.classList.add('busy');
 
         $div.addEventListener('click', onClick);
 
@@ -58,11 +62,11 @@ const VIEW_PLAYER_LIST = (function () {
 
     const rebuildPlayerList = (players) => {
         const $container = document.querySelector('#list-of-players');
-        $container.innerHTML = "";
+        document.querySelectorAll('#list-of-players .player-row:not(.header-row)').forEach(x => x.remove());
 
         players.forEach(player => {
             if (player.name !== GAME_BRAIN.playerName) {
-                $container.appendChild(createPlayerRow(player.name, player.invited, player.inviting, player.busy));
+                $container.appendChild(createPlayerRow(player.name, player.invited, player.inviting, player.busy, player.completedRooms));
             }
         });
 

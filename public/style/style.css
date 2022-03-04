@@ -288,32 +288,67 @@ html, body{
     flex-direction: column;
 }
 
-#list-of-players {
+#view-players .header-row {
+    position: relative;
+    width: 60vw;
+    padding: 0 3em 0 2em;
+    box-sizing: border-box;
+    top: 4em;
+    font-weight: bold;
+}
+
+#list-of-players-container {
     width: 60vw;
     height: 50vh;
     display: flex;
     flex-direction: column;
     border: 6px solid #6C2A88;
-    padding: 2em;
     box-sizing: border-box;
-    overflow-y: scroll;
+    background: black;
+    padding-top: 3em;
+}
+
+#list-of-players {
+    display: flex;
+    flex-direction: column;
+    padding:  0 2em;
+    box-sizing: border-box;
+    overflow-y: auto;
     background: black;
 }
 
 #view-players .player-row {
+    position: relative;
     display: flex;
     align-items: center;
     flex: 0 0 4em;
 
     color: white;
 }
-#view-players .player-row:not(.busy):hover {
+#view-players .player-row:not(.header-row):after {
+    content: "";
+    position: absolute;
+    height: 1px;
+    left: 4em;
+    right: 4em;
+    bottom: 0;
+    background: #3b174b;
+}
+#view-players .player-row .actions{
+    flex: 0 0 300px;
+    text-align: right;
+}
+#view-players .player-row:not(.busy):not(.header-row):hover {
     background: #222;
 }
 
 #view-players .player-row .name{
     flex: 1;
     padding: 0 1em;
+}
+
+#view-players .player-row .completion{
+    padding: 0 2em;
 }
 
 #view-players .player-row:not(.busy) .playing{
