@@ -2,7 +2,7 @@ var GAME_WIDTH = 20;
 var GAME_HEIGHT = 20;
 var TILE_EDGE = 128;
 
-var GAME_VERSION = 4;
+var GAME_VERSION = 5;
 var LOG_LEVEL = 1;
 
 var MOVE_TO_NAME = [
@@ -18,6 +18,7 @@ var MOVE_TO_NAME = [
 	"Turn CW",
 	"Turn CCW",
 ];
+var MOVE_TO_NAME_WITH_META = [];
 
 var urlParts = Array.from(window.location.href.matchAll(/[?&]([^=&#]+)(:?=([^&#]+))?/g)).reduce((all, parts) => {
 	var name = parts[1];
@@ -37,6 +38,7 @@ MOVE_TO_NAME[98] = "Requesting next level";
 MOVE_TO_NAME[99] = "Requesting restart";
 MOVE_TO_NAME[100] = "Player has died...";
 
+MOVE_TO_NAME_WITH_META[98] = "Requesting level: %%";
 
 var KEY_NAME_MAP = {
 	'Backspace': 101
