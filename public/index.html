@@ -63,6 +63,7 @@
     <script defer src="js/view-game.js?v=1.1.2"></script>
     <script defer src="js/views.js?v=1.1.2"></script>
     <script defer src="js/game-brain.js?v=1.1.2"></script>
+    <script defer src="js/window-room-list.js?v=1.1.2"></script>
     <style>
         html,
         body {
@@ -375,7 +376,6 @@
             </div>
             <div id="list-of-players-container">
                 <div id="list-of-players">
-                    <div class="header-bg"></div>
                     <div class="player-row invited inviting busy">
                         <div class="name">Skell 1</div>
                         <div class="completion">3 / 54</div>
@@ -418,6 +418,7 @@
                 <hr>
                 <input id="custom-emote-input" type="text" placeholder="Message other player...">
                 <button id="custom-emote-send" title="Send custom message" value="">Send message</button>
+                <button id="change-room" title="Select a different room to play" value="">Change Room</button>
                 <hr>
                 <ul>
                 </ul>
@@ -442,6 +443,28 @@
         &mdash; <a id="help-link">Help</a>
         &mdash; <a href="https://github.com/EvidentlyCube/ssssss" target="_blank">GitHub</a>
         &mdash; <a href="https://forum.caravelgames.com/viewtopic.php?TopicID=45559" target="_blank">DROD Forum</a>
+    </div>
+    <div id="room-list" class="info-box">
+        <a class="close-info-box">Close</a>
+        <h3>Select room to play:</h3>
+        <div id="list-of-rooms-container">
+            <div class="room-row header-row">
+                <div class="name">Name</div>
+                <div class="author">Author</div>
+                <div class="status">Who Completed?</div>
+                <div class="actions">Actions</div>
+            </div>
+            <div id="list-of-rooms">
+                <div class="room-row">
+                    <div class="name">Room Name</div>
+                    <div class="author">Author</div>
+                    <div class="status">Completed</div>
+                    <div class="actions">
+                        <button class="play">Play</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div id="changelog" class="info-box">
         <a class="close-info-box">Close</a>

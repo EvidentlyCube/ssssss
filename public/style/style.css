@@ -507,9 +507,9 @@ hr {
 .info-box > div {
     width: 80vw;
     height: 80vh;
-    overflow-y: scroll;
+    overflow-y: auto;
     background: rgba(61, 56, 0, 1);
-    padding: 20px;
+    padding: 1em;
     box-sizing: border-box;
     border-radius: 20px;
     border: 5px solid rgba(131, 126, 0, 1);
@@ -537,4 +537,84 @@ hr {
 }
 .close-info-box:hover {
     text-decoration: underline;
+}
+
+#room-list h3 {
+    position: absolute;
+    top: 5vh;
+}
+
+#list-of-rooms-container {
+    display: flex;
+    flex-direction: column;
+    border: 6px solid #6C2A88;
+    box-sizing: border-box;
+    background: black;
+    padding-top: 3em;
+}
+
+#list-of-rooms {
+    display: flex;
+    flex-direction: column;
+    padding:  0 2em;
+    box-sizing: border-box;
+    overflow-y: auto;
+    background: black;
+}
+
+#list-of-rooms-container {
+    overflow-y: hidden;
+    max-width: 60vw;
+}
+
+#room-list .room-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 0 0 4em;
+    padding: 0.5em 0;
+
+    color: white;
+}
+#room-list .room-row:not(.header-row):after {
+    content: "";
+    position: absolute;
+    height: 1px;
+    left: 4em;
+    right: 4em;
+    bottom: 0;
+    background: #3b174b;
+}
+#room-list .room-row:not(.header-row):hover {
+    background: #222;
+}
+
+#room-list .room-row .name{
+    flex: 1 0 30%;
+    padding: 0 1em;
+}
+
+#room-list .room-row .author{
+    flex: 1 0 20%;
+    padding: 0 1em;
+}
+
+#room-list .room-row .actions{
+    flex: 0 0 100px;
+    text-align: right;
+}
+
+#room-list .room-row .status{
+    flex: 0 0 160px;
+    text-align: center;
+}
+
+#room-list .header-row {
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: 0 4em 0 3em;
+    box-sizing: border-box;
+    top: 1em;
+    font-weight: bold;
 }
