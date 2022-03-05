@@ -311,8 +311,8 @@ function createSession(player1, player2) {
 
 	SessionManager.emit([player1, player2], "data", { type: "startPlaying" });
 
-	SessionManager.emit(player1, "data", { type: "friendName", name: player2.name });
-	SessionManager.emit(player2, "data", { type: "friendName", name: player1.name });
+	SessionManager.emit(player1, "data", { type: "friendName", name: player2.name, completedRooms: player2.completedRoomNames });
+	SessionManager.emit(player2, "data", { type: "friendName", name: player1.name, completedRooms: player1.completedRoomNames });
 
 	initializeRoom(session, null, false);
 }

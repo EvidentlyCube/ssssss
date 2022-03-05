@@ -12,6 +12,7 @@ const GAME_BRAIN = (function () {
                 break;
             case 'friendName':
                 GAME_BRAIN.friendName = data.name;
+                GAME_BRAIN.friendCompletedRooms = data.completedRooms;
                 break;
             case 'startPlaying':
                 GAME_BRAIN.isPlaying = true;
@@ -67,6 +68,7 @@ const GAME_BRAIN = (function () {
         friendName: null,
         rooms: [],
         isPlaying: false,
-        completedRooms: completedRooms
+        completedRooms: completedRooms,
+        friendCompletedRooms: completedRooms,
     };
 })();
