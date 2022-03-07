@@ -1,0 +1,21 @@
+{
+  "name": "@ssssss/core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "scripts": {
+    "build:desktop": "node nw-builds.js"
+  },
+  "devDependencies": {
+    "adm-zip": "^0.5.9",
+    "fs-extra": "^10.0.1",
+    "rimraf": "^3.0.2",
+    "targz": "^1.0.1",
+    "temp-dir": "^2.0.0",
+    "winresourcer": "^0.9.0",
+    "yargs-parser": "^21.0.1"
+  }
+}
