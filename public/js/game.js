@@ -129,7 +129,7 @@ function getGameLogic(emit) {
 					logMessage(friendName + " has died. You can continue playing alone or press 'R' to request restart or 'Enter' to request starting next room.");
 				}
 				isPlayerDead[data.player] = true;
-				updateMove(100, data.player == currentPlayer);
+				updateMove(100, data.player == currentPlayer, data.meta);
 				break;
 
 			case ("friendName"):
@@ -144,14 +144,14 @@ function getGameLogic(emit) {
 			case ("friendMove"):
 				if (isPlayerDead[1 - currentPlayer]) {
 					if (data.move > 10) {
-						updateMove(data.move <= 10 ? 103 : data.move, false);
+						updateMove(data.move <= 10 ? 103 : data.move, false, data.meta);
 					}
 					break;
 				}
 				if (data.turn == currentTurn) {
 					renders.clearGhosts();
 					friendMoveQueue = data.queue;
-					updateMove(data.move <= 10 ? 103 : data.move, false);
+					updateMove(data.move <= 10 ? 103 : data.move, false, data.meta);
 				}
 				break;
 
@@ -279,9 +279,10 @@ function getGameLogic(emit) {
 
 	$("html").on('keydown', _onHtmlKeypress);
 
-	function emitCurrentMove(move) {
+	function emitCurrentMove(move, meta) {
 		emit('move', {
 			move: yourMoveQueue.length > 0 ? yourMoveQueue[0] : move,
+			meta: meta || null,
 			queue: yourMoveQueue,
 			turn: currentTurn
 		});
@@ -295,7 +296,10 @@ function getGameLogic(emit) {
 		$('#turn-number .room-name').text("in '" + name + "'");
 	}
 
-	function updateMove(move, isYou) {
+	function updateMove(move, isYou, meta) {
+		if (isYou) {
+			moveMeta = meta || null;
+		}
 		var queue = isYou ? yourMoveQueue : friendMoveQueue;
 		var position = isYou ? yourPosition : friendPosition;
 
@@ -338,7 +342,8 @@ function getGameLogic(emit) {
 			$move.text('');
 			$move.addClass('spinner');
 		} else {
-			let text = MOVE_TO_NAME[move];
+			let text = (meta ? MOVE_TO_NAME_WITH_META[move] : '') || MOVE_TO_NAME[move];
+			text = text.replace('%%', meta || '');
 			if (queue.length > 1) {
 				text += ' <span class="muted">(+' + (queue.length - 1) + " other move";
 				if (queue.length > 2) {
@@ -398,7 +403,12 @@ function getGameLogic(emit) {
 		$customEmoteInput.blur();
 	}
 
-	return { onConnect, onDisconnect, onData }
+	document.addEventListener('go-to-room', e => {
+		updateMove(98, true, e.roomName);
+		emitCurrentMove(98, e.roomName);
+	})
+
+	return { onConnect, onDisconnect, onData,  }
 };
 
 function generatePitLevel() {

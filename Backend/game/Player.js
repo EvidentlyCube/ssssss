@@ -7,6 +7,7 @@ const Player = function (socket, name) {
 
 	this.session = null;
 	this.nextMove = null;
+	this.nextMoveMeta = null;
 
 	this.isDead = false;
 	this.completedRoomNames = [];

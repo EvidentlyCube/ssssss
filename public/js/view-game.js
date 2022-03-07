@@ -20,6 +20,10 @@ const VIEW_GAME = (function () {
         document.querySelector('#gameGrid').style.margin = `-${margin}px`;
     }
 
+    const showWindowRoomList = () => {
+        WINDOW_ROOM_LIST.show();
+    }
+
     return {
         activate: () => {
             SOCKET_API.onData.add(onData);
@@ -27,6 +31,7 @@ const VIEW_GAME = (function () {
             gameLogic.onConnect();
             onResize();
             window.addEventListener('resize', onResize);
+            $('#change-room').on('click', showWindowRoomList);
         },
 
         deactivate: () => {
@@ -34,6 +39,7 @@ const VIEW_GAME = (function () {
 
             SOCKET_API.onData.remove(onData);
             window.removeEventListener('resize', onResize);
+            $('#change-room').off('click', showWindowRoomList);
         }
     }
 })();

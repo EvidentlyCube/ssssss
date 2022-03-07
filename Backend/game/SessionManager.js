@@ -200,7 +200,7 @@ const SessionManager = {
 		});
 	},
 
-	submitMove: function (socket, move, turn, moveQueue) {
+	submitMove: function (socket, move, turn, moveQueue, meta) {
 		if (!Utils.isMove(move)) {
 			return;
 		}
@@ -231,15 +231,17 @@ const SessionManager = {
 					break;
 			}
 
-			return;r
+			return;
 		}
 
 		player.session.logDebug(`'${player.name}' has submitted move '${Constants.MoveNames[move]}'`);
 
 		player.nextMove = move === Constants.Moves.UndoQueuedMove ? null : move;
+		player.nextMoveMeta = meta;
 		this.emit(player.session.getOtherPlayer(player), 'data', {
 			type: "friendMove",
 			move: player.nextMove,
+			meta: player.nextMoveMeta,
 			queue: moveQueue,
 			position: {
 				x: player.x,
@@ -314,16 +316,17 @@ function createSession(player1, player2) {
 	SessionManager.emit(player1, "data", { type: "friendName", name: player2.name, completedRooms: player2.completedRoomNames });
 	SessionManager.emit(player2, "data", { type: "friendName", name: player1.name, completedRooms: player1.completedRoomNames });
 
-	initializeRoom(session, null, false);
+	initializeRoom(session, null, false, []);
 }
 
-function initializeRoom(session, id, isRestarting) {
-	const room = RoomRepository.getNewRoom(session.players[0], session.players[1], id, isRestarting, RecordStore);
+function initializeRoom(session, id, isRestarting, requestedRoomNames) {
+	const room = RoomRepository.getNewRoom(session.players[0], session.players[1], id, isRestarting, RecordStore, requestedRoomNames);
 
 	session.room = room;
 
 	session.players.forEach(player => {
 		player.nextMove = null;
+		player.nextMoveMeta = null;
 		player.isDead = false;
 	});
 
@@ -378,8 +381,10 @@ function restartCheck(session) {
 	if (isRestarting[0] && isRestarting[1]) {
 		session.log("Restarting level...");
 		session.players[0].nextMove = null;
+		session.players[0].nextMoveMeta = null;
 		session.players[1].nextMove = null;
-		initializeRoom(session, session.room.id, true);
+		session.players[1].nextMoveMeta = null;
+		initializeRoom(session, session.room.id, true, []);
 		return true;
 	}
 
@@ -401,10 +406,13 @@ function nextLevelCheck(session) {
 	const isNextLevelling = session.players.map(x => x.nextMove == Constants.Moves.NextLevel);
 
 	if (isNextLevelling[0] && isNextLevelling[1]) {
+		const requestedMoves = [session.players[0].nextMoveMeta, session.players[1].nextMoveMeta];
 		session.log("Going to the next level...");
 		session.players[0].nextMove = null;
+		session.players[0].nextMoveMeta = null;
 		session.players[1].nextMove = null;
-		initializeRoom(session, session.room.id, false);
+		session.players[1].nextMoveMeta = null;
+		initializeRoom(session, session.room.id, false, requestedMoves);
 		return true;
 	}
 
@@ -429,7 +437,9 @@ function swapCheck(session) {
 		session.players[0] = session.players[1];
 		session.players[1] = tmp;
 		session.players[0].nextMove = null;
+		session.players[0].nextMoveMeta = null;
 		session.players[1].nextMove = null;
+		session.players[1].nextMoveMeta = null;
 		SessionManager.emit(session.players[0], "data", { type: "swap", player: 0 });
 		SessionManager.emit(session.players[1], "data", { type: "swap", player: 1 });
 		sendRoomState(session);

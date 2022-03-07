@@ -52,15 +52,8 @@ function getNextBestRoomDataId(availableRoomNames, startingId){
 }
 
 const RoomRepository = {
-	getNewRoom: function (player1, player2, requestedId, isRestarting, recordStore) {
-		const availableRoomNames = getUncompletedRoomNames(player1, player2, recordStore);
-
-		const preliminaryId = (requestedId !== null
-			? requestedId
-			: Math.floor(Math.random() * roomsDatabase.length)) % roomsDatabase.length;
-		const selectedRoomId = isRestarting
-			? requestedId
-			: getNextBestRoomDataId(availableRoomNames, preliminaryId);
+	getNewRoom: function (player1, player2, requestedId, isRestarting, recordStore, requestedRoomNames) {
+		const selectedRoomId = determineRoomId(player1, player2, requestedId, isRestarting, recordStore, requestedRoomNames);
 
 		const roomData = roomsDatabase[selectedRoomId];
 
@@ -76,6 +69,33 @@ const RoomRepository = {
 		return roomsDatabase;
 	}
 };
+
+function determineRoomId(player1, player2, requestedId, isRestarting, recordStore, requestedRoomNames) {
+	requestedRoomNames = requestedRoomNames || [];
+	while (requestedRoomNames.length > 0) {
+		const roomName = requestedRoomNames.shift();
+		if (!roomName) {
+			continue;
+		}
+
+		const index = roomsDatabase.findIndex(x => x.name.toUpperCase() === roomName.toUpperCase());
+
+		if (index !== -1) {
+			return index;
+		}
+	}
+
+	const availableRoomNames = getUncompletedRoomNames(player1, player2, recordStore);
+
+	const preliminaryId = (requestedId !== null
+		? requestedId
+		: Math.floor(Math.random() * roomsDatabase.length)) % roomsDatabase.length;
+	const selectedRoomId = isRestarting
+		? requestedId
+		: getNextBestRoomDataId(availableRoomNames, preliminaryId);
+
+	return selectedRoomId;
+}
 
 validateUniqueRoomNames(RoomRepository.getRoomNames());
 

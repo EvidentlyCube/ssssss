@@ -110,7 +110,7 @@ io.on('connection', function(socket){
 			return;
 		}
 
-		SessionManager.submitMove(socket, data.move, data.turn, data.queue);
+		SessionManager.submitMove(socket, data.move, data.turn, data.queue, data.meta);
 	});
 
 	socket.on('getPlayerList', function(data){
