@@ -474,6 +474,7 @@ hr {
 }
 
 #version {
+    text-align: right;
     position: absolute;
     right: 4px;
     bottom: 4px;
