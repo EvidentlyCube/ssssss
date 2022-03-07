@@ -190,6 +190,7 @@ function getGameLogic(emit) {
 				renderer.renderTopLayer(renders.topLayerDraw, data.room, currentPlayer);
 				yourPosition = data.room.players[currentPlayer];
 				friendPosition = data.room.players[1-currentPlayer];
+				renders.clearGhosts();
 				updateTurnValue(data.room.turn);
 				updateMove(102, true);
 				updateMove(102, false);
