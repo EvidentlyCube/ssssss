@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Woooo mystery</title>
+    <title>SSSSSS Client</title>
     <link rel="stylesheet" type="text/css" href="style/style.css?v=1.1.2">
     <script src="js/log.js?v=1.1.2"></script>
     <script src="js/constants.js?v=1.1.2"></script>
@@ -50,6 +50,7 @@
             }
         }
     </script>
+    <script defer src="config.js?v=1.1.2"></script>
     <script defer src="js/socket.io.js?v=1.1.2"></script>
     <script defer src="js/jquery-3.3.1.min.js?v=1.1.2"></script>
     <script defer src="js/signals.js?v=1.1.2"></script>
@@ -168,6 +169,17 @@
 
             VIEWS.showLogin();
         };
+        const titleSetInterval = setInterval(() => {
+            if (typeof SSSSSS_CONFIG !== 'undefined') {
+                clearInterval(titleSetInterval);
+
+                document.title = SSSSSS_CONFIG.title.replace(/%(.+?)%/g, (_, name) => {
+                    return SSSSSS_CONFIG[name] || `%${name}%`;
+                });
+
+                document.querySelector('#ver-number').innerText = `V${SSSSSS_CONFIG.version}-${SSSSSS_CONFIG.type} (${SSSSSS_CONFIG.date})`;
+            }
+        }, 16);
     </script>
 </head>
 
@@ -438,8 +450,9 @@
         <p>The game will try to automatically log you in once the connection is reestablished.</p>
     </div>
     <div id="version">
-        V1.1.2 (2022-03-04) by <a href="https://www.evidentlycube.com">Evidently Cube</a>
-        &mdash; <a id="changelog-link">Changelog</a>
+        <span id="ver-number">&#8943;</span> by <a href="https://www.evidentlycube.com">Evidently Cube</a>
+        <br>
+        <a id="changelog-link">Changelog</a>
         &mdash; <a id="help-link">Help</a>
         &mdash; <a href="https://github.com/EvidentlyCube/ssssss" target="_blank">GitHub</a>
         &mdash; <a href="https://forum.caravelgames.com/viewtopic.php?TopicID=45559" target="_blank">DROD Forum</a>
