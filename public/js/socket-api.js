@@ -13,7 +13,7 @@ const SOCKET_API = (function () {
             }
 
             return new Promise(resolve => {
-                API.socket = io({ query: `version=${GAME_VERSION}` });
+                API.socket = io(SSSSSS_CONFIG.socket, { query: `version=${GAME_VERSION}` });
 
                 API.socket.on('connect', () => {
                     LOG.info('Connected to socket');
