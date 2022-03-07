@@ -417,12 +417,22 @@ function nextLevelCheck(session) {
 	}
 
 	if (isNextLevelling[0] && !isNextLevelling[1]) {
-		SessionManager.emit(session.players[1], "data", { type: "log", log: "Other player is requesting next room, press 'Enter' to confirm" });
+		if (session.players[0].nextMoveMeta) {
+			SessionManager.emit(session.players[1], "data", { type: "log", log: `Other player is requesting room '${session.players[0].nextMoveMeta}', press 'Enter' to confirm` });
+
+		} else {
+			SessionManager.emit(session.players[1], "data", { type: "log", log: "Other player is requesting next room, press 'Enter' to confirm" });
+		}
 		return true;
 	}
 
 	if (!isNextLevelling[0] && isNextLevelling[1]) {
-		SessionManager.emit(session.players[0], "data", { type: "log", log: "Other player is requesting next room, press 'Enter' to confirm" });
+		if (session.players[1].nextMoveMeta) {
+			SessionManager.emit(session.players[0], "data", { type: "log", log: `Other player is requesting room '${session.players[1].nextMoveMeta}', press 'Enter' to confirm` });
+
+		} else {
+			SessionManager.emit(session.players[0], "data", { type: "log", log: "Other player is requesting next room, press 'Enter' to confirm" });
+		}
 		return true;
 	}
 
