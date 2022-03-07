@@ -482,8 +482,14 @@ function generatePitLevel() {
 $(document).ready(function() {
 	$('#changelog-link').on('click', () => $("#changelog").css({display: 'flex'}));
 	$('#help-link').on('click', () => $("#help").css({display: 'flex'}));
+	$('#full-screen').on('click', () => {
+		if (!document.fullscreenElement) {
+			document.querySelector('body').requestFullscreen({navigationUI: "hide"});
+		} else {
+			document.exitFullscreen();
+		}
+	});
 	$('.close-info-box').on('click', function() {
-		console.log($(this));
 		$(this).parent().hide();
 	});
 })
