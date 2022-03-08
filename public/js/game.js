@@ -120,8 +120,6 @@ function getGameLogic(emit) {
 				currentTurn = data.room.turn;
 				currentPlayer = data.order;
 
-				console.log(data.room);
-
 				renders.clearTopLayer();
 				renders.clearFLayer();
 				renders.clearTransparentLayer();
@@ -144,6 +142,7 @@ function getGameLogic(emit) {
 				break;
 
 			case ("processed"):
+				currentRoom = data.room;
 				currentTurn = data.room.turn;
 
 				if (data.room.wasBusy) {
@@ -182,7 +181,6 @@ function getGameLogic(emit) {
 	}
 
 	const _onKeyPress = function (e) {
-		console.log(e.originalEvent.key);
 		if (e.originalEvent.keyCode === 13) {
 			submitCustomEmote();
 			return false;
@@ -235,6 +233,11 @@ function getGameLogic(emit) {
 
 		if (move !== null) {
 			if (isPlayerDead[currentPlayer] && move <= 10) {
+				return;
+			}
+
+			if (move === 96 && currentTurn === 0) {
+				logMessage("Cannot undo moves on 0th turn");
 				return;
 			}
 

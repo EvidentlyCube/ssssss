@@ -4,6 +4,7 @@ var Session = function(player1, player2){
 	this.room = null;
 	this.name = `${player1.name.substring(0, 8).toUpperCase()}:${player2.name.substring(0, 8).toUpperCase()}`
 	this.players = [player1, player2];
+	this.moves = [];
 
 	player1.session = this;
 	player2.session = this;

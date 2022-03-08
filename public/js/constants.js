@@ -34,6 +34,7 @@ var AUTO_NAME = urlParts.autoName;
 var AUTO_INVITE_ANYONE = urlParts.autoInviteAnyone;
 var SHOW_CANVAS = urlParts.showCanvas;
 
+MOVE_TO_NAME[96] = "Requesting undoing last move";
 MOVE_TO_NAME[97] = "Requesting swap";
 MOVE_TO_NAME[98] = "Requesting next level";
 MOVE_TO_NAME[99] = "Requesting restart";
@@ -42,7 +43,8 @@ MOVE_TO_NAME[100] = "Player has died...";
 MOVE_TO_NAME_WITH_META[98] = "Requesting level: %%";
 
 var KEY_NAME_MAP = {
-	'Backspace': 101
+	'Backspace': 101,
+	'u': 96,
 }
 
 var KEY_CODE_MAP = {

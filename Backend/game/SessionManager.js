@@ -316,10 +316,11 @@ function createSession(player1, player2) {
 	SessionManager.emit(player1, "data", { type: "friendName", name: player2.name, completedRooms: player2.completedRoomNames });
 	SessionManager.emit(player2, "data", { type: "friendName", name: player1.name, completedRooms: player1.completedRoomNames });
 
-	initializeRoom(session, null, false, []);
+	initializeRoom(session, null, false, [], false);
 }
 
-function initializeRoom(session, id, isRestarting, requestedRoomNames) {
+function initializeRoom(session, id, isRestarting, requestedRoomNames, silent) {
+	session.moves.length = 0;
 	const room = RoomRepository.getNewRoom(session.players[0], session.players[1], id, isRestarting, RecordStore, requestedRoomNames);
 
 	session.room = room;
@@ -330,8 +331,10 @@ function initializeRoom(session, id, isRestarting, requestedRoomNames) {
 		player.isDead = false;
 	});
 
-	SessionManager.emit(session.players[0], "data", { type: "room", room: room.toJson(), order: 0 });
-	SessionManager.emit(session.players[1], "data", { type: "room", room: room.toJson(), order: 1 });
+	if (!silent) {
+		SessionManager.emit(session.players[0], "data", { type: "room", room: room.toJson(), order: 0 });
+		SessionManager.emit(session.players[1], "data", { type: "room", room: room.toJson(), order: 1 });
+	}
 
 	session.logDebug(`Loaded room for '${session.room.name}'`);
 }
@@ -344,6 +347,7 @@ function tryToUpdateSession(session) {
 	let blockUpdate = restartCheck(session);
 	blockUpdate |= nextLevelCheck(session);
 	blockUpdate |= swapCheck(session);
+	blockUpdate |= undoMoveCheck(session);
 
 	if (blockUpdate) {
 		return;
@@ -358,6 +362,7 @@ function tryToUpdateSession(session) {
 
 	session.log("Processing move...");
 
+	session.moves.push([session.players[0].nextMove, session.players[1].nextMove]);
 	session.room.process(SessionManager);
 
 	if (!session.room.isCompleted && session.room.areAllMonstersDead()) {
@@ -384,7 +389,8 @@ function restartCheck(session) {
 		session.players[0].nextMoveMeta = null;
 		session.players[1].nextMove = null;
 		session.players[1].nextMoveMeta = null;
-		initializeRoom(session, session.room.id, true, []);
+		session.moves.length = 0;
+		initializeRoom(session, session.room.id, true, [], false);
 		return true;
 	}
 
@@ -402,6 +408,45 @@ function restartCheck(session) {
 }
 
 
+function undoMoveCheck(session) {
+	const isUndoing = session.players.map(x => x.nextMove == Constants.Moves.UndoPlayedMove);
+
+	if (isUndoing[0] && isUndoing[1]) {
+		session.log("Undoing move...");
+		const moves = session.moves.slice(0, -1);
+		session.players[0].nextMove = null;
+		session.players[0].nextMoveMeta = null;
+		session.players[1].nextMove = null;
+		session.players[1].nextMoveMeta = null;
+		session.moves.length = 0;
+		initializeRoom(session, session.room.id, true, [], true);
+		for (const move of moves) {
+			session.players[0].nextMove = move[0];
+			session.players[1].nextMove = move[1];
+			session.room.process(SessionManager);
+		}
+
+		session.moves.push(...moves);
+		session.room.wasBusyTurn = true;
+		sendRoomState(session);
+
+		return true;
+	}
+
+	if (isUndoing[0] && !isUndoing[1]) {
+		SessionManager.emit(session.players[1], "data", { type: "log", log: "Other player is requesting to undo last move, press 'U' to confirm" });
+		return true;
+	}
+
+	if (!isUndoing[0] && isUndoing[1]) {
+		SessionManager.emit(session.players[0], "data", { type: "log", log: "Other player is requesting to undo last move, press 'U' to confirm" });
+		return true;
+	}
+
+	return false;
+}
+
+
 function nextLevelCheck(session) {
 	const isNextLevelling = session.players.map(x => x.nextMove == Constants.Moves.NextLevel);
 
@@ -412,7 +457,7 @@ function nextLevelCheck(session) {
 		session.players[0].nextMoveMeta = null;
 		session.players[1].nextMove = null;
 		session.players[1].nextMoveMeta = null;
-		initializeRoom(session, session.room.id, false, requestedMoves);
+		initializeRoom(session, session.room.id, false, requestedMoves, false);
 		return true;
 	}
 

@@ -67,6 +67,7 @@ module.exports = {
 			|| move == Constants.Moves.Restart
 			|| move == Constants.Moves.NextLevel
 			|| move == Constants.Moves.UndoQueuedMove
+			|| move == Constants.Moves.UndoPlayedMove
 		|| move == Constants.Moves.DebugComplete;
 	},
 

@@ -74,6 +74,7 @@ module.exports = {
 		CW: 9,
 		CCW: 10,
 		DebugComplete: 80,
+		UndoPlayedMove: 96,
 		Swap: 97,
 		NextLevel: 98,
 		Restart: 99,
