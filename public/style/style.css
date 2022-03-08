@@ -533,7 +533,8 @@ hr {
 }
 .close-info-box {
     position: absolute;
-    bottom: 5vh;
+    bottom: 1vh;
+    padding: 3vh 10vw;
     cursor: pointer;
 }
 .close-info-box:hover {
