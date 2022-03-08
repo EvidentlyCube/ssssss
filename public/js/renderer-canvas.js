@@ -1,4 +1,3 @@
-
 var CANVAS_RENDERER = (function() {
 	var CANVAS_WIDTH = TILE_EDGE * GAME_WIDTH;
 	var CANVAS_HEIGHT = TILE_EDGE * GAME_HEIGHT;
@@ -8,6 +7,7 @@ var CANVAS_RENDERER = (function() {
 	var transparentLayer = createCanvasLayer().context;
 	var topLayer = createCanvasLayer().context;
 	var ghostLayer = createCanvasLayer().context;
+	var debugLayer = createCanvasLayer().context;
 	var mainCanvas;
 	var mainLayer;
 
@@ -35,11 +35,13 @@ var CANVAS_RENDERER = (function() {
 		canvas.width = CANVAS_WIDTH;
 		canvas.height = CANVAS_HEIGHT;
 
-		// canvas.style.width = "400px";
-		// canvas.style.height = "400px";
-		// canvas.style.position = "relative";
-		// canvas.style.top = "100vh";
-// document.querySelector('body').appendChild(canvas);
+		if (SHOW_CANVAS) {
+			canvas.style.width = "400px";
+			canvas.style.height = "400px";
+			canvas.style.position = "relative";
+			canvas.style.top = "100vh";
+			document.querySelector('body').appendChild(canvas);
+		}
 
 		return {
 			canvas,
@@ -54,6 +56,7 @@ var CANVAS_RENDERER = (function() {
 			mainLayer.drawImage(transparentLayer.canvas, 0, 0);
 			mainLayer.drawImage(topLayer.canvas, 0, 0);
 			mainLayer.drawImage(ghostLayer.canvas, 0, 0);
+			mainLayer.drawImage(debugLayer.canvas, 0, 0);
 		},
 		clearTopLayer: function() {
 			topLayer.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -69,6 +72,14 @@ var CANVAS_RENDERER = (function() {
 
 		clearGhosts: function() {
 			ghostLayer.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+		},
+
+		clearDebug: function() {
+			debugLayer.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+		},
+
+		getDebugLayer: function() {
+			return debugLayer;
 		},
 
 		oLayerDraw: function(x, y, spriteX, spriteY) {

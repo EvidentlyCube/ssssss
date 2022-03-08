@@ -32,6 +32,7 @@ var DEBUG = urlParts.debug;
 var AUTO_ACCEPT_INVITE = urlParts.autoAcceptInvite;
 var AUTO_NAME = urlParts.autoName;
 var AUTO_INVITE_ANYONE = urlParts.autoInviteAnyone;
+var SHOW_CANVAS = urlParts.showCanvas;
 
 MOVE_TO_NAME[97] = "Requesting swap";
 MOVE_TO_NAME[98] = "Requesting next level";

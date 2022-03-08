@@ -17,6 +17,7 @@ function getGameLogic(emit) {
 	var emoteClearTimerYou;
 	var emoteClearTimerPartner;
 
+	var currentRoom;
 	var currentTurn;
 	var currentPlayer;
 
@@ -28,49 +29,8 @@ function getGameLogic(emit) {
 	var friendPosition;
 	var isPlayerDead = [false, false];
 
-
-
-	const sharedRenderer = {
-		clearTopLayer: function() {
-			HTML_RENDERER.clearTopLayer();
-			CANVAS_RENDERER.clearTopLayer();
-		},
-
-		clearTransparentLayer: function() {
-			HTML_RENDERER.clearTransparentLayer();
-			CANVAS_RENDERER.clearTransparentLayer();
-		},
-
-		clearFLayer: function() {
-			HTML_RENDERER.clearFLayer();
-			CANVAS_RENDERER.clearFLayer();
-		},
-
-		clearGhosts: function() {
-			HTML_RENDERER.clearGhosts();
-			CANVAS_RENDERER.clearGhosts();
-		},
-
-		oLayerDraw: function(x, y, spriteX, spriteY) {
-			HTML_RENDERER.oLayerDraw(x, y, spriteX, spriteY);
-			CANVAS_RENDERER.oLayerDraw(x, y, spriteX, spriteY);
-		},
-
-		fLayerDraw: function(x, y, spriteX, spriteY) {
-			HTML_RENDERER.fLayerDraw(x, y, spriteX, spriteY);
-			CANVAS_RENDERER.fLayerDraw(x, y, spriteX, spriteY);
-		},
-
-		topLayerDraw: function(x, y, spriteX, spriteY, opacity, classes, opts) {
-			HTML_RENDERER.topLayerDraw(x, y, spriteX, spriteY, opacity, classes, opts);
-			CANVAS_RENDERER.topLayerDraw(x, y, spriteX, spriteY, opacity, classes, opts);
-		},
-
-		transparentLayerDraw: function(x, y, spriteX, spriteY, opacity, classes) {
-			HTML_RENDERER.transparentLayerDraw(x, y, spriteX, spriteY, opacity, classes);
-			CANVAS_RENDERER.transparentLayerDraw(x, y, spriteX, spriteY, opacity, classes);
-		}
-	}
+	var mousePreviewX = -1;
+	var mousePreviewY = -1;
 
 	const renders = CANVAS_RENDERER;
 
@@ -156,8 +116,11 @@ function getGameLogic(emit) {
 				break;
 
 			case ("room"):
+				currentRoom = data.room;
 				currentTurn = data.room.turn;
 				currentPlayer = data.order;
+
+				console.log(data.room);
 
 				renders.clearTopLayer();
 				renders.clearFLayer();
@@ -175,6 +138,9 @@ function getGameLogic(emit) {
 				updateAuthor(data.room.author);
 				updateMove(null, true);
 				updateMove(null, false);
+
+				redrawMousePreview();
+
 				break;
 
 			case ("processed"):
@@ -199,6 +165,7 @@ function getGameLogic(emit) {
 					emitCurrentMove();
 				}
 
+				redrawMousePreview();
 				break;
 
 			case ("emote"):
@@ -408,6 +375,97 @@ function getGameLogic(emit) {
 		updateMove(98, true, e.roomName);
 		emitCurrentMove(98, e.roomName);
 	})
+
+	function redrawMousePreview() {
+		const layer = CANVAS_RENDERER.getDebugLayer();
+		layer.beginPath();
+		CANVAS_RENDERER.clearDebug();
+
+		if (mousePreviewX < 0 || mousePreviewY < 0 || mousePreviewX >= GAME_WIDTH || mousePreviewY >= GAME_HEIGHT || !currentRoom) {
+			return;
+		}
+
+		{ // draw cursor
+			layer.strokeStyle = 'rgba(255, 255, 0, 0.4)';
+			layer.lineWidth = 12;
+			layer.rect(mousePreviewX * TILE_EDGE, mousePreviewY * TILE_EDGE, TILE_EDGE, TILE_EDGE);
+			layer.stroke();
+			layer.strokeStyle = null;
+			layer.lineWidth = null;
+		}
+
+		var TE = TILE_EDGE;
+		var TH = TILE_EDGE / 2;
+		var T8 = TH * 0.8;
+		{
+			// Draw orb connections
+			for (var orb of currentRoom.orbs) {
+				if (orb.x === mousePreviewX && orb.y === mousePreviewY) {
+					for (var agent of orb.agents) {
+						var toX = agent.x * TE + TH;
+						var toY = agent.y * TE + TH;
+
+						layer.lineWidth = 12;
+						layer.strokeStyle = 'rgba(255, 255, 0, 0.4)';
+						layer.beginPath();
+						layer.moveTo(orb.x * TE + TH, orb.y * TE + TH);
+						layer.lineTo(toX, toY);
+						layer.stroke();
+
+						switch(agent.type) {
+							case (1): // Toggle, draw triangle
+								layer.lineWidth = 12;
+								layer.strokeStyle = 'rgba(0, 255, 255, 1)';
+								layer.beginPath();
+								layer.moveTo(toX, toY - T8);
+								layer.lineTo(toX + T8, toY + T8);
+								layer.lineTo(toX - T8, toY + T8);
+								layer.lineTo(toX, toY - T8);
+								layer.stroke();
+								break;
+							case (2): // Open, draw circle
+								layer.lineWidth = 8;
+								layer.strokeStyle = 'rgba(0, 255, 0, 1)';
+								layer.beginPath();
+								layer.arc(toX, toY, T8, 0, 2 * Math.PI);
+								layer.stroke();
+								break;
+							case (3): // Close, draw X
+								layer.lineWidth = 12;
+								layer.strokeStyle = 'rgba(255, 0, 0, 1)';
+								layer.beginPath();
+								layer.moveTo(toX - T8, toY - T8);
+								layer.lineTo(toX + T8, toY + T8);
+								layer.stroke();
+								layer.beginPath();
+								layer.moveTo(toX + T8, toY - T8);
+								layer.lineTo(toX - T8, toY + T8);
+								layer.stroke();
+								break;
+						}
+					}
+				}
+			}
+		}
+
+		CANVAS_RENDERER.refreshMainLayer();
+	}
+
+	document.querySelector('canvas').addEventListener('mousemove', e => {
+		var rect = e.target.getBoundingClientRect();
+		var tileWidth = rect.width / GAME_WIDTH;
+		var tileHeight = rect.height / GAME_HEIGHT;
+		mousePreviewX = Math.floor((e.clientX - rect.left) / tileWidth);
+		mousePreviewY = Math.floor((e.clientY - rect.top) / tileHeight);
+
+		redrawMousePreview();
+	});
+	document.querySelector('canvas').addEventListener('mouseout', e => {
+		CANVAS_RENDERER.getDebugLayer().beginPath();
+		CANVAS_RENDERER.clearDebug();
+		CANVAS_RENDERER.refreshMainLayer();
+
+	});
 
 	return { onConnect, onDisconnect, onData,  }
 };

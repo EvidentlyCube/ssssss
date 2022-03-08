@@ -301,6 +301,7 @@ Room.prototype.toJson = function () {
 		wasBusy: this.wasBusyTurn,
 		name: this.name,
 		author: this.author,
+		orbs: this.orbs,
 		players: this.players.map(player => {
 			return {
 				x: player.x,
