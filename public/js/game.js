@@ -374,7 +374,7 @@ function getGameLogic(emit) {
 	document.addEventListener('go-to-room', e => {
 		updateMove(98, true, e.roomName);
 		emitCurrentMove(98, e.roomName);
-	})
+	});
 
 	function redrawMousePreview() {
 		const layer = CANVAS_RENDERER.getDebugLayer();
@@ -459,6 +459,154 @@ function getGameLogic(emit) {
 		mousePreviewY = Math.floor((e.clientY - rect.top) / tileHeight);
 
 		redrawMousePreview();
+	});
+	document.querySelector('canvas').addEventListener('click', e => {
+		if (mousePreviewX < 0 || mousePreviewY < 0 || mousePreviewX >= GAME_WIDTH || mousePreviewY >= GAME_HEIGHT || !currentRoom) {
+			return;
+		}
+
+		var modal = $("#tile-info");
+		var descriptions = [];
+
+		switch(currentRoom.tiles[mousePreviewX][mousePreviewY]) {
+			case 0:
+				descriptions.push('<strong>Floor</strong> - Allows all monsters and players to walk over it.');
+				break;
+
+			case 1:
+				descriptions.push("<strong>Wall</strong> - Blocks all monsters' and players' movement. Also blocks <strong>Gazer</strong>'s view.")
+				break;
+
+			case 2:
+				descriptions.push("<strong>Closed Yellow Gate</strong> - Acts like <strong>Wall</strong>, will open when an appropriate pressure plate is stepped on.")
+				break;
+
+			case 3:
+				descriptions.push("<strong>Open Red Gate</strong> - Acts like <strong>Floor</strong>, will close when an appropriate pressure plate is stepped on.")
+				break;
+
+			case 4:
+				descriptions.push(
+					"<strong>Pressure Plate</strong> - Acts like <strong>Floor</strong>. when stepped on will act upon <strong>Yellow Gates</strong>. "
+					+ "Inspect the connections that appear when you move your mouse over the pressure plate to know which doors are affected and how:"
+					+ "<ul>"
+					+ "<li><strong>Green Circle</strong> - The door will open/</li>"
+					+ "<li><strong>Cyan Triangle</strong> - The door will toggle its state; close if opened, open if closed.</li>"
+					+ "<li><strong>Red X</strong> - The door will close.</li>"
+					+ "</ul>"
+				);
+				break;
+
+			case 5:
+				descriptions.push("<strong>Pressure Plate (used)</strong> - Acts like <strong>Floor</strong>, does nothing else.")
+				break;
+
+			case 6:
+				descriptions.push("<strong>Pit</strong> - Blocks all monsters' and players' movement. Allows <strong>Gazers</strong> to see through it.")
+				break;
+
+			case 7:
+				descriptions.push("<strong>Trapdoor</strong> - Falls down, forming a pit when a player steps off it. When all trapdoors are dropped <strong>Red Gates</strong> will toggle.")
+				break;
+
+			case 8:
+				descriptions.push("<strong>Closed Red Gate</strong> - Acts like <strong>Wall</strong>, will open when all <strong>Trapdoors</strong> are dropped.")
+				break;
+
+			case 9:
+				descriptions.push("<strong>Open Red Gate</strong> - Acts like <strong>Floor</strong>, will close when all <strong>Trapdoors</strong> are dropped.")
+				break;
+
+			case 11:
+				descriptions.push("<strong>Closed Black Gate</strong> - Acts like <strong>Wall</strong>, will open when all <strong>Tar</strong> is cleared.")
+				break;
+
+			case 12:
+				descriptions.push("<strong>Open Black Gate</strong> - Acts like <strong>Floor</strong>, will close when all <strong>Tar</strong> is cleared.")
+				break;
+		}
+
+		switch(currentRoom.tilesF[mousePreviewX][mousePreviewY]) {
+			case 100:
+			case 101:
+			case 102:
+			case 103:
+			case 104:
+			case 105:
+			case 106:
+			case 107:
+				descriptions.push('<strong>Arrow</strong> - Prevents players and monsters moving against it, both when stepping onto it and when stopping off it. Can be traversed sideways.');
+				break;
+		}
+
+		switch(currentRoom.tilesT[mousePreviewX][mousePreviewY]) {
+			case 10:
+				descriptions.push("<strong>Tar</strong> - Can only be cut on flat edges. Any blob of tar that's smaller than 2x2 will turn into tar babies. "
+				 + "Can be simutlaneously stabbed in two places by two players to carve different shapes'");
+				break;
+		}
+
+		for(var monster of currentRoom.monsters) {
+			if (monster.x !== mousePreviewX || monster.y !== mousePreviewY) {
+				continue;
+			}
+
+			switch(monster.type) {
+				case (3):
+					descriptions.push("<strong>Roach (monster)</strong> - Follows the closest player. If a diagonal move is blocked it'll prefer to move vertically than horizontally, if possible. "
+						+ "Will kill the player upon stepping on their tile. Is blocked by swords. Can be killed by moving your sword onto its tile (either by stepping or rotating).");
+						break;
+				case (4):
+					descriptions.push("<strong>Roach Queen (monster)</strong> - Runs away from the closest player. If a diagonal move is blocked it'll prefer to move vertically than horizontally, if possible. "
+						+ "Will never attack the player. Every 30 turns it'll lay eggs around it that hatch into Raoches in 4 turns.");
+						break;
+
+				case (5):
+					descriptions.push("<strong>Gazer (monster)</strong> - Stays motionless unless awoken. When woken up behaves exactly like a roach. "
+						+ "Will wake up when a player moves across its line of sight (literally the line of sight). "
+						+ "Diagonally facing gazers' view can often be stepped around by moving diagonally.");
+						break;
+
+
+				case (6):
+					descriptions.push("<strong>Roach Egg (monster)</strong> - Doesn't move, hatches 4 moves after being laid.");
+					break;
+
+				case (7):
+					descriptions.push("<strong>Active Gazer (monster)</strong> - Behaves exactly like a roach.");
+					break;
+
+				case (8):
+					descriptions.push("<strong>Blocker (monster)</strong> - Unkillable and not dangerous. Blocks other monsters. Will not slide against walls when diagonal move is blocked. "
+						+ "Not required to be killed in order to clear the room.")
+						break;
+
+				case (9):
+					descriptions.push("<strong>Tar Baby (monster)</strong> - Behaves exactly like a roach. Is spawned from cutting tar.");
+					break;
+
+				case (10):
+					descriptions.push("<strong>Rock Golem (monster)</strong> - Follows the closets player. If a diagonal move is blocked it'll stay motionless. "
+						+ "Turns into a pile of rock that blocks movement when killed.");
+					break;
+
+				case (11):
+					descriptions.push("<strong>Rock Pile</strong> - Acts like a <strong>Wall</strong>.");
+					break;
+			}
+		}
+
+		if (mousePreviewX === yourPosition.x && mousePreviewY === yourPosition.y) {
+			descriptions.push("<strong>You, " + GAME_BRAIN.playerName + "</strong> - you can move in eight directions and swing your sword. Your job is to clear the room of all the required monsters "
+				+ "and ensure your partner stays alive.");
+		}
+		if (mousePreviewX === friendPosition.x && mousePreviewY === friendPosition.y) {
+			descriptions.push("<strong>Partner, " + GAME_BRAIN.friendName + "</strong> - they can move in eight directions and swing your sword. Tehir job is to clear the room of all the required monsters "
+				+ "and ensure you stay alive.");
+		}
+
+		modal.css({display: 'flex'});
+		modal.find('ul')[0].innerHTML = "<li>" + descriptions.join("</li><li>") + "</li>";
 	});
 	document.querySelector('canvas').addEventListener('mouseout', e => {
 		CANVAS_RENDERER.getDebugLayer().beginPath();

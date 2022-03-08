@@ -620,3 +620,6 @@ hr {
     top: 1em;
     font-weight: bold;
 }
+#tile-info.info-box > div {
+    height: 40vh;
+}
