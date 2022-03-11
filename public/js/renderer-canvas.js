@@ -49,14 +49,24 @@ var CANVAS_RENDERER = (function() {
 		};
 	}
 
+	let isRedrawQueued = false;
+
     return {
 		refreshMainLayer: function() {
-			mainLayer.drawImage(oLayer.canvas, 0, 0);
-			mainLayer.drawImage(fLayer.canvas, 0, 0);
-			mainLayer.drawImage(transparentLayer.canvas, 0, 0);
-			mainLayer.drawImage(topLayer.canvas, 0, 0);
-			mainLayer.drawImage(ghostLayer.canvas, 0, 0);
-			mainLayer.drawImage(debugLayer.canvas, 0, 0);
+			if (isRedrawQueued) {
+				return;
+			}
+
+			isRedrawQueued = true;
+			window.requestAnimationFrame(() => {
+				isRedrawQueued = false;
+				mainLayer.drawImage(oLayer.canvas, 0, 0);
+				mainLayer.drawImage(fLayer.canvas, 0, 0);
+				mainLayer.drawImage(transparentLayer.canvas, 0, 0);
+				mainLayer.drawImage(topLayer.canvas, 0, 0);
+				mainLayer.drawImage(ghostLayer.canvas, 0, 0);
+				mainLayer.drawImage(debugLayer.canvas, 0, 0);
+			});
 		},
 		clearTopLayer: function() {
 			topLayer.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);

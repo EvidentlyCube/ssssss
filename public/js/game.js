@@ -94,6 +94,7 @@ function getGameLogic(emit) {
 				}
 				isPlayerDead[data.player] = true;
 				updateMove(100, data.player == currentPlayer, data.meta);
+				drawGhosts();
 				break;
 
 			case ("friendName"):
@@ -116,6 +117,7 @@ function getGameLogic(emit) {
 					renders.clearGhosts();
 					friendMoveQueue = data.queue;
 					updateMove(data.move <= 10 ? 103 : data.move, false, data.meta);
+					drawGhosts();
 				}
 				break;
 
@@ -141,6 +143,7 @@ function getGameLogic(emit) {
 				updateAuthor(data.room.author);
 				updateMove(null, true);
 				updateMove(null, false);
+				drawGhosts();
 
 				redrawMousePreview();
 
@@ -165,6 +168,7 @@ function getGameLogic(emit) {
 				updateTurnValue(data.room.turn);
 				updateMove(102, true);
 				updateMove(102, false);
+				drawGhosts();
 
 				if (yourMoveQueue.length > 0) {
 					emitCurrentMove();
@@ -258,6 +262,7 @@ function getGameLogic(emit) {
 			renders.clearGhosts();
 			updateMove(move, true);
 			emitCurrentMove(move);
+			drawGhosts();
 			return false;
 		}
 	};
@@ -310,9 +315,6 @@ function getGameLogic(emit) {
 		} else if (move > 10) {
 			queue.length = 0;
 		}
-
-		renderer.renderGhost(renders.topLayerDraw, position, queue, isYou);
-		CANVAS_RENDERER.refreshMainLayer();
 
 		var $div = isYou ? $("#move-you") : $("#move-partner");
 		var $move = $div.find('.move');
@@ -369,6 +371,15 @@ function getGameLogic(emit) {
 
 	function updateAuthor(name) {
 		$(".author-name").text('by ' + name);
+	}
+
+	function drawGhosts() {
+		if (yourMoveQueue.length > friendMoveQueue.length) {
+			renderer.renderGhost(renders.topLayerDraw, yourPosition, yourMoveQueue, true);
+		} else if (yourMoveQueue.length < friendMoveQueue.length) {
+			renderer.renderGhost(renders.topLayerDraw, friendPosition, friendMoveQueue, false);
+		}
+		CANVAS_RENDERER.refreshMainLayer();
 	}
 
 	function logMessage(message) {
