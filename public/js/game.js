@@ -32,6 +32,9 @@ function getGameLogic(emit) {
 	var mousePreviewX = -1;
 	var mousePreviewY = -1;
 
+	var friendMousePreviewX = -1;
+	var friendMousePreviewY = -1;
+
 	const renders = CANVAS_RENDERER;
 
 	logMessage("Game initialized");
@@ -176,6 +179,14 @@ function getGameLogic(emit) {
 					$emotePartner.stop().fadeOut();
 					emoteClearTimerPartner = null;
 				}, 4000);
+				break;
+
+			case ("mouseMoved"):
+				if (data.x !== friendMousePreviewX || data.y !== friendMousePreviewY) {
+					friendMousePreviewX = data.x;
+					friendMousePreviewY = data.y;
+					redrawMousePreview();
+				}
 				break;
 		}
 	}
@@ -384,13 +395,30 @@ function getGameLogic(emit) {
 		layer.beginPath();
 		CANVAS_RENDERER.clearDebug();
 
+		if (
+			friendMousePreviewX >= 0
+			&& friendMousePreviewY >= 0
+			&& friendMousePreviewX < GAME_WIDTH
+			&& friendMousePreviewY < GAME_HEIGHT
+		) {
+			layer.strokeStyle = 'rgba(0, 0, 255, 0.4)';
+			layer.lineWidth = 12;
+			layer.beginPath();
+			layer.rect(friendMousePreviewX * TILE_EDGE, friendMousePreviewY * TILE_EDGE, TILE_EDGE, TILE_EDGE);
+			layer.stroke();
+			layer.strokeStyle = null;
+			layer.lineWidth = null;
+		}
+
 		if (mousePreviewX < 0 || mousePreviewY < 0 || mousePreviewX >= GAME_WIDTH || mousePreviewY >= GAME_HEIGHT || !currentRoom) {
+			CANVAS_RENDERER.refreshMainLayer();
 			return;
 		}
 
 		{ // draw cursor
 			layer.strokeStyle = 'rgba(255, 255, 0, 0.4)';
 			layer.lineWidth = 12;
+			layer.beginPath();
 			layer.rect(mousePreviewX * TILE_EDGE, mousePreviewY * TILE_EDGE, TILE_EDGE, TILE_EDGE);
 			layer.stroke();
 			layer.strokeStyle = null;
@@ -458,10 +486,19 @@ function getGameLogic(emit) {
 		var rect = e.target.getBoundingClientRect();
 		var tileWidth = rect.width / GAME_WIDTH;
 		var tileHeight = rect.height / GAME_HEIGHT;
-		mousePreviewX = Math.floor((e.clientX - rect.left) / tileWidth);
-		mousePreviewY = Math.floor((e.clientY - rect.top) / tileHeight);
+		var newX = Math.floor((e.clientX - rect.left) / tileWidth);
+		var newY = Math.floor((e.clientY - rect.top) / tileHeight);
 
-		redrawMousePreview();
+		if (newX !== mousePreviewX || newY !== mousePreviewY) {
+			mousePreviewX = newX;
+			mousePreviewY = newY;
+			emit('mouseMoved', {
+				x: newX,
+				y: newY
+			})
+			redrawMousePreview();
+		}
+
 	});
 	document.querySelector('canvas').addEventListener('click', e => {
 		if (mousePreviewX < 0 || mousePreviewY < 0 || mousePreviewX >= GAME_WIDTH || mousePreviewY >= GAME_HEIGHT || !currentRoom) {
@@ -612,10 +649,15 @@ function getGameLogic(emit) {
 		modal.find('ul')[0].innerHTML = "<li>" + descriptions.join("</li><li>") + "</li>";
 	});
 	document.querySelector('canvas').addEventListener('mouseout', e => {
-		CANVAS_RENDERER.getDebugLayer().beginPath();
-		CANVAS_RENDERER.clearDebug();
-		CANVAS_RENDERER.refreshMainLayer();
-
+		if (mousePreviewX !== -1 && mousePreviewY !== -1) {
+			mousePreviewX = -1;
+			mousePreviewY = -1;
+			emit('mouseMoved', {
+				x: mousePreviewX,
+				y: mousePreviewY
+			})
+			redrawMousePreview();
+		}
 	});
 
 	return { onConnect, onDisconnect, onData,  }

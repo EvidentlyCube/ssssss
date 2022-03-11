@@ -273,6 +273,19 @@ const SessionManager = {
 		});
 	},
 
+	mouseMoved: function(socket, x, y) {
+		const player = getPlayerBySocket(socket);
+
+		if (!player || !player.session) {
+			return;
+		}
+
+		this.emit(player.session.getOtherPlayer(player), 'data', {
+			type: "mouseMoved",
+			x, y
+		});
+	},
+
 	killSession: function (session) {
 		if (!session.players) {
 			this.killSession(getPlayerBySocket(session).session);

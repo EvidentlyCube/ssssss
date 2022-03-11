@@ -129,6 +129,14 @@ io.on('connection', function(socket){
 		SessionManager.submitEmote(socket, data.emote);
 	});
 
+	socket.on('mouseMoved', function(data){
+		if (isInvalidVersion(data)){
+			return;
+		}
+
+		SessionManager.mouseMoved(socket, data.x, data.y);
+	});
+
 	socket.on('stop-session', function(data){
 		if (isInvalidVersion(data)){
 			return;
