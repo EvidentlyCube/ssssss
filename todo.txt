@@ -1,6 +1,3 @@
-From Surreal's stream:
-- Go through all rooms and give them difficult level in some scale, and then when selecting the first room to play it should chose from among the easy ones.
-
 Planned changes:
  - Allow solo play
  - Allow room selection

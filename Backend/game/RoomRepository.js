@@ -16,7 +16,18 @@ function loadHolds(names){
 		rooms.push.apply(rooms, HoldLoader.load(`${__dirname}/../${name}.hold`));
 	});
 
-	Utils.shuffleArray(rooms);
+	rooms.sort((roomLeft, roomRight) => {
+		let difficultyCompare = roomLeft.difficulty - roomRight.difficulty;
+		if (difficultyCompare !== 0) {
+			return Math.sign(difficultyCompare);
+		}
+
+		let authorCompare = roomLeft.author.toLocaleUpperCase().localeCompare(roomRight.author.toLocaleUpperCase());
+
+		return authorCompare === 0
+			? roomLeft.name.toLocaleUpperCase().localeCompare(roomRight.name.toLocaleUpperCase())
+			: authorCompare;
+	})
 
 	return rooms;
 }
@@ -89,7 +100,7 @@ function determineRoomId(player1, player2, requestedId, isRestarting, recordStor
 
 	const preliminaryId = (requestedId !== null
 		? requestedId
-		: Math.floor(Math.random() * roomsDatabase.length)) % roomsDatabase.length;
+		: -1);
 	const selectedRoomId = isRestarting
 		? requestedId
 		: getNextBestRoomDataId(availableRoomNames, preliminaryId);

@@ -48,11 +48,17 @@ function loadRoom(roomXml, author) {
 		monsters: [],
 		orbs: [],
 		author: author,
-		name: xpath.select('./Scrolls', roomXml)[0].getAttribute('Message'),
+		difficulty: 1,
+		name: xpath.select('./Scrolls', roomXml)[0]?.getAttribute('Message') || "",
 		rockGolemHack: false
 	};
 
 	room.name = Buffer.from(room.name, 'base64').toString().replace(/(.)./g, '$1');
+	const matches = room.name.match(/(.+?)\[D(.+?)\]/);
+	if (matches) {
+		room.name = matches[1].trim();
+		room.difficulty = parseFloat(matches[2]);
+	}
 
 	const squaresData = loadSquares(roomXml.getAttribute("Squares"));
 
