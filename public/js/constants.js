@@ -2,7 +2,7 @@ var GAME_WIDTH = 20;
 var GAME_HEIGHT = 20;
 var TILE_EDGE = 128;
 
-var GAME_VERSION = 5;
+var GAME_VERSION = 6;
 var LOG_LEVEL = 1;
 
 var MOVE_TO_NAME = [

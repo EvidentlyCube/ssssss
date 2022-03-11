@@ -16,7 +16,7 @@ MoveNames[98] = "Next level";
 MoveNames[99] = "Restart";
 
 module.exports = {
-	GameVersion: 5,
+	GameVersion: 6,
 	RoomWidth: 20,
 	RoomHeight: 20,
 	MoveNames: MoveNames,
