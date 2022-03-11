@@ -206,23 +206,23 @@ html, body{
     max-width: 440px;
     position: absolute;
     z-index: 200;
-    font-size: 128px;
+    font-size: 32px;
     pointer-events: none;
     display: none;
 }
 
 #messageOther{
-    top: 0;
-    left: 0;
+    top: 4px;
+    left: 4px;
     background: rgba(255, 255, 0, 0.8);
-    border: 1px solid rgba(255, 255, 0, 0.6);
+    border: 2px solid rgba(64, 64, 0, 0.6);
 
 }
 #messageYou{
-    right: 0;
-    bottom: 0;
+    right: 4px;
+    bottom: 4px;
     background: rgba(0, 255, 0, 0.8);
-    border: 1px solid rgba(0, 255, 0, 0.6);
+    border: 2px solid rgba(0, 64, 0, 0.6);
 }
 
 #custom-emote-input{
