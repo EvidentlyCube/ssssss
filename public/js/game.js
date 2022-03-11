@@ -550,8 +550,8 @@ function getGameLogic(emit) {
 			// Draw monster target and distances
 			const monster = currentRoom.monsters.find(monster => monster.x === mousePreviewX && monster.y === mousePreviewY);
 			if (monster) {
-				const target = monster.target === 0 ? yourPosition : friendPosition;
-				const otherPlayer = monster.target === 0 ? friendPosition : yourPosition;
+				const target = monster.target === currentPlayer ? yourPosition : friendPosition;
+				const otherPlayer = monster.target === currentPlayer ? friendPosition : yourPosition;
 
 				// Draw line to target
 				layer.lineWidth = 12;
