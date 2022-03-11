@@ -1,3 +1,11 @@
+From Surreal's stream:
+- Also add tile position to Tile Description popup
+- Also in the Tile Description add info about how monsters chase closest player
+- Go through all rooms and give them difficult level in some scale, and then when selecting the first room to play it should chose from among the easy ones.
+- Try to streamline the "who is closer" algorithm for monsters so that if two players are in the same distance to it, it'll follow the one it was following last time
+- Hovering over a monster should show which player it's currently targetting
+- See about adding smooth monster movement between turns
+
 Planned changes:
  - ALlow controls with numpad even with disabled numlock
  - Allow solo play

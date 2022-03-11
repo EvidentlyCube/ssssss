@@ -425,6 +425,30 @@ function getGameLogic(emit) {
 			layer.lineWidth = null;
 		}
 
+		{
+			// Draw position under cursor
+			const text = `${(mousePreviewX+1).toFixed(0)}:${(mousePreviewY+1).toFixed(0)}`
+			layer.font = "50px toms_new_romantom";
+			layer.fillStyle = "#FFF";
+			layer.shadowColor = "#000";
+			layer.shadowBlur =8;
+			const measure = layer.measureText(text);
+			if (mousePreviewY > 0) {
+				layer.textBaseline = "bottom";
+				layer.fillText(text, mousePreviewX * TILE_EDGE + (TILE_EDGE - measure.width) / 2, mousePreviewY * TILE_EDGE);
+				layer.shadowBlur =4;
+				layer.fillText(text, mousePreviewX * TILE_EDGE + (TILE_EDGE - measure.width) / 2, mousePreviewY * TILE_EDGE);
+			} else {
+				layer.textBaseline = "top";
+				layer.fillText(text, mousePreviewX * TILE_EDGE + (TILE_EDGE - measure.width) / 2, mousePreviewY * TILE_EDGE+ TILE_EDGE);
+				layer.shadowBlur =4;
+				layer.fillText(text, mousePreviewX * TILE_EDGE + (TILE_EDGE - measure.width) / 2, mousePreviewY * TILE_EDGE+ TILE_EDGE);
+			}
+			layer.fillStyle = "";
+			layer.shadowColor = "";
+			layer.shadowBlur = 0;
+		}
+
 		var TE = TILE_EDGE;
 		var TH = TILE_EDGE / 2;
 		var T8 = TH * 0.8;
