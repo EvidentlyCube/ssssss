@@ -155,6 +155,25 @@ var CANVAS_RENDERER = (function() {
 			target.globalAlpha = 1;
 		},
 
+		topLayerAnimate: function(obj, sprite, opacity, offset) {
+			var drawX = (obj.prevX + (obj.x - obj.prevX) * offset) * TILE_EDGE;
+			var drawY = (obj.prevY + (obj.y - obj.prevY) * offset) * TILE_EDGE;
+
+			topLayer.globalAlpha = opacity;
+			topLayer.drawImage(
+				generalTiles,
+				sprite.x * TILE_EDGE,
+				sprite.y * TILE_EDGE,
+				TILE_EDGE,
+				TILE_EDGE,
+				drawX,
+				drawY,
+				TILE_EDGE,
+				TILE_EDGE
+			);
+			topLayer.globalAlpha = 1;
+		},
+
 		transparentLayerDraw: function(x, y, spriteX, spriteY, opacity, classes) {
 			if (typeof spriteX === "undefined") {
 				classes = y.classes || [];

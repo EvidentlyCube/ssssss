@@ -59,7 +59,6 @@ const RoomRepository = {
 
 		const room = new Room(player1, player2, selectedRoomId);
 		room.readFromJson(roomData);
-		room.monsters.forEach(monster => monster.updateTarget(room));
 
 		return room;
 	},

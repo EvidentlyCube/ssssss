@@ -34,6 +34,7 @@ function getGameLogic(emit) {
 
 	var friendMousePreviewX = -1;
 	var friendMousePreviewY = -1;
+	var animationOffset = 1;
 
 	const renders = CANVAS_RENDERER;
 
@@ -131,7 +132,8 @@ function getGameLogic(emit) {
 				isPlayerDead[0] = false;
 				isPlayerDead[1] = false;
 				renderer.renderRoom(renders.oLayerDraw, renders.fLayerDraw, renders.transparentLayerDraw, data.room);
-				renderer.renderTopLayer(renders.topLayerDraw, data.room, currentPlayer);
+				renderer.animateTopLayer(renders.topLayerAnimate, data.room, currentPlayer, 1);
+				animationOffset = 1;
 				yourPosition = data.room.players[currentPlayer];
 				friendPosition = data.room.players[1-currentPlayer];
 				updateTurnValue(data.room.turn);
@@ -155,7 +157,8 @@ function getGameLogic(emit) {
 				}
 
 				renders.clearTopLayer();
-				renderer.renderTopLayer(renders.topLayerDraw, data.room, currentPlayer);
+				renderer.animateTopLayer(renders.topLayerAnimate, data.room, currentPlayer, 0);
+				animationOffset = 0;
 				yourPosition = data.room.players[currentPlayer];
 				friendPosition = data.room.players[1-currentPlayer];
 				renders.clearGhosts();
@@ -339,6 +342,20 @@ function getGameLogic(emit) {
 				$div.addClass('warning');
 			}
 		}
+	}
+
+	function animate() {
+		if (animationOffset === 1) {
+			return;
+		}
+
+		renders.clearTopLayer();
+		animationOffset += (1 - animationOffset) * 0.25;
+		if (animationOffset >= 0.99) {
+			animationOffset = 1;
+		}
+
+		renderer.animateTopLayer(renders.topLayerAnimate, currentRoom, currentPlayer, animationOffset);
 	}
 
 	function updateFriendName(name) {
@@ -720,6 +737,8 @@ function getGameLogic(emit) {
 			redrawMousePreview();
 		}
 	});
+
+	setInterval(animate, 1000/60);
 
 	return { onConnect, onDisconnect, onData,  }
 };

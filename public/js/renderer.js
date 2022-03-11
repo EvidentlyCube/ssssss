@@ -46,6 +46,42 @@ var renderer = {
 		CANVAS_RENDERER.refreshMainLayer();
 	},
 
+	animateTopLayer: function(animate, roomData, currentPlayerId, offset) {
+		const currentPlayer = roomData.players[currentPlayerId];
+		const otherPlayer = roomData.players[1 -currentPlayerId];
+
+		animate(currentPlayer, getBeethroTile(currentPlayer.o), currentPlayer.isDead ? 0.3 : 1, offset);
+		animate(otherPlayer, getGuardTile(otherPlayer.o), otherPlayer.isDead ? 0.3 : 1, offset);
+
+		for (var i = 0; i < roomData.monsters.length; i++) {
+			var monster = roomData.monsters[i];
+
+			if (monster.type == 3) {
+				animate(monster, getRoachTile(monster.o), 1, offset);
+			} else if (monster.type == 4) {
+				animate(monster, getRoachQueenTile(monster.o), 1, offset);
+			} else if (monster.type == 5) {
+				animate(monster, getEvilEyeTile(monster.o), 1, offset);
+			} else if (monster.type == 6) {
+				animate(monster, getRoachEggTile(monster.o), 1, offset);
+			} else if (monster.type == 7) {
+				animate(monster, getActiveEvilEyeTile(monster.o), 1, offset);
+			} else if (monster.type == 8) {
+				animate(monster, {x: 8, y: 2}, 1, offset);
+			} else if (monster.type == 9) {
+				animate(monster, getTarBabyTile(monster.o), 1, offset);
+			} else if (monster.type == 10) {
+				animate(monster, getRockGolemTile(monster.o), 1, offset);
+			} else if (monster.type == 11) {
+				animate(monster, getRockGolemPileTile(), 1, offset);
+			}
+		}
+
+		animate(currentPlayer.sword, getBeethroSwordTile(currentPlayer.o), currentPlayer.isDead ? 0.3 : 1, offset);
+		animate(otherPlayer.sword, getGuardSwordTile(otherPlayer.o), otherPlayer.isDead ? 0.3 : 1, offset);
+		CANVAS_RENDERER.refreshMainLayer();
+	},
+
 	renderTopLayer: function (topLayerDraw, roomData, currentPlayerId) {
 		const otherPlayerId = 1 - currentPlayerId;
 		topLayerDraw(roomData.players[currentPlayerId], getBeethroTile(roomData.players[currentPlayerId].o, roomData.players[currentPlayerId].isDead ? 0.3 : 1));

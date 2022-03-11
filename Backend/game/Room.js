@@ -300,7 +300,7 @@ Room.prototype.toJson = function () {
 		tilesF: this.tilesF,
 		tilesT: this.tilesT,
 		monsters: this.monsters.map(monster => {
-			return {x: monster.x, y: monster.y, o: monster.o, type: monster.type, target: monster.lastTarget}
+			return {x: monster.x, y: monster.y, o: monster.o, prevX: monster.prevX, prevY: monster.prevY, type: monster.type, target: monster.lastTarget}
 		}),
 		turn: this.turn,
 		wasBusy: this.wasBusyTurn,
@@ -311,11 +311,15 @@ Room.prototype.toJson = function () {
 			return {
 				x: player.x,
 				y: player.y,
+				prevX: player.prevX,
+				prevY: player.prevY,
 				o: player.o,
 				isDead: player.isDead,
 				sword: {
 					x: player.x + Utils.dirX(player.o),
-					y: player.y + Utils.dirY(player.o)
+					y: player.y + Utils.dirY(player.o),
+					prevX: player.prevX + Utils.dirX(player.o),
+					prevY: player.prevY + Utils.dirY(player.o),
 				}
 			}
 		}),
@@ -362,13 +366,22 @@ Room.prototype.readFromJson = function (json) {
 
 	for (let i = 0; i < 2; i++) {
 		this.players[i].x = json.players[i].x;
+		this.players[i].prevX = json.players[i].x;
 		this.players[i].y = json.players[i].y;
+		this.players[i].prevY = json.players[i].x;
 		this.players[i].o = json.players[i].o;
 	}
 
 	json.monsters.forEach(monster => {
 		this.addMonster(monster.x, monster.y, monster.o, monster.type);
 	});
+
+	for (let monster of this.monsters) {
+		monster.prevX = monster.x;
+		monster.prevY = monster.y;
+		monster.updateTarget(this);
+	}
+
 };
 
 Room.prototype.isStableTar = function(x, y, tarType){
@@ -430,11 +443,15 @@ Room.prototype.process = function (SessionManager) {
 	const wasDead = this.players.map(x => x.isDead);
 
 	for (let player of this.players) {
+		player.prevX = player.x;
+		player.prevY = player.y;
 		player.process(this, player.nextMove);
 		player.nextMove = null;
 	}
 
 	for (let monster of this.monsters) {
+		monster.prevX = monster.x;
+		monster.prevY = monster.y;
 		monster.process(this);
 	}
 
