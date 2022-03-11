@@ -390,6 +390,33 @@ function getGameLogic(emit) {
 		emitCurrentMove(98, e.roomName);
 	});
 
+	function cleverTextDraw(layer, tileX, tileY, text, color, shadows) {
+		shadows = shadows || 1;
+		// Draw position under cursor
+		layer.font = "50px toms_new_romantom";
+		layer.fillStyle = color;
+		layer.shadowColor = "#000";
+		layer.shadowBlur =8;
+		const measure = layer.measureText(text);
+		if (mousePreviewY > 0) {
+			layer.textBaseline = "bottom";
+			while (shadows--) {
+				layer.fillText(text, tileX * TILE_EDGE + (TILE_EDGE - measure.width) / 2, tileY * TILE_EDGE);
+			}
+			layer.shadowBlur = 4;
+			layer.fillText(text, tileX * TILE_EDGE + (TILE_EDGE - measure.width) / 2, tileY * TILE_EDGE);
+		} else {
+			layer.textBaseline = "top";
+			while (shadows--) {
+				layer.fillText(text, tileX * TILE_EDGE + (TILE_EDGE - measure.width) / 2, tileY * TILE_EDGE+ TILE_EDGE);
+			}
+			layer.shadowBlur =4;
+			layer.fillText(text, tileX * TILE_EDGE + (TILE_EDGE - measure.width) / 2, tileY * TILE_EDGE+ TILE_EDGE);
+		}
+		layer.fillStyle = "";
+		layer.shadowColor = "";
+		layer.shadowBlur = 0;
+	}
 	function redrawMousePreview() {
 		const layer = CANVAS_RENDERER.getDebugLayer();
 		layer.beginPath();
@@ -426,27 +453,13 @@ function getGameLogic(emit) {
 		}
 
 		{
-			// Draw position under cursor
-			const text = `${(mousePreviewX+1).toFixed(0)}:${(mousePreviewY+1).toFixed(0)}`
-			layer.font = "50px toms_new_romantom";
-			layer.fillStyle = "#FFF";
-			layer.shadowColor = "#000";
-			layer.shadowBlur =8;
-			const measure = layer.measureText(text);
-			if (mousePreviewY > 0) {
-				layer.textBaseline = "bottom";
-				layer.fillText(text, mousePreviewX * TILE_EDGE + (TILE_EDGE - measure.width) / 2, mousePreviewY * TILE_EDGE);
-				layer.shadowBlur =4;
-				layer.fillText(text, mousePreviewX * TILE_EDGE + (TILE_EDGE - measure.width) / 2, mousePreviewY * TILE_EDGE);
-			} else {
-				layer.textBaseline = "top";
-				layer.fillText(text, mousePreviewX * TILE_EDGE + (TILE_EDGE - measure.width) / 2, mousePreviewY * TILE_EDGE+ TILE_EDGE);
-				layer.shadowBlur =4;
-				layer.fillText(text, mousePreviewX * TILE_EDGE + (TILE_EDGE - measure.width) / 2, mousePreviewY * TILE_EDGE+ TILE_EDGE);
-			}
-			layer.fillStyle = "";
-			layer.shadowColor = "";
-			layer.shadowBlur = 0;
+			cleverTextDraw(
+				layer,
+				mousePreviewX,
+				mousePreviewY,
+				`${(mousePreviewX+1).toFixed(0)}:${(mousePreviewY+1).toFixed(0)}`,
+				'#FFF'
+			);
 		}
 
 		var TE = TILE_EDGE;
@@ -500,6 +513,30 @@ function getGameLogic(emit) {
 						}
 					}
 				}
+			}
+		}
+
+		{
+			// Draw monster target and distances
+			const monster = currentRoom.monsters.find(monster => monster.x === mousePreviewX && monster.y === mousePreviewY);
+			if (monster) {
+				const target = monster.target === 0 ? yourPosition : friendPosition;
+				const otherPlayer = monster.target === 0 ? friendPosition : yourPosition;
+
+				// Draw line to target
+				layer.lineWidth = 12;
+				layer.strokeStyle = 'rgba(255, 0, 0, 0.8)';
+				layer.beginPath();
+				layer.moveTo(monster.x * TE + TH, monster.y * TE + TH);
+				layer.lineTo(target.x * TE + TH, target.y * TE + TH);
+				layer.stroke();
+
+				// Distance to You
+				const distancePlayer = Math.abs(target.x - monster.x) + Math.abs(target.y - monster.y);
+				const distanceFriend = Math.abs(otherPlayer.x - monster.x) + Math.abs(otherPlayer.y - monster.y);
+
+				cleverTextDraw(layer, target.x, target.y, distancePlayer + "d.", "rgb(255, 255, 0)", 4);
+				cleverTextDraw(layer, otherPlayer.x, otherPlayer.y, distanceFriend + "d.", "rgb(0, 255, 255)", 4);
 			}
 		}
 

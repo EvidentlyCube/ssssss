@@ -300,7 +300,7 @@ Room.prototype.toJson = function () {
 		tilesF: this.tilesF,
 		tilesT: this.tilesT,
 		monsters: this.monsters.map(monster => {
-			return {x: monster.x, y: monster.y, o: monster.o, type: monster.type}
+			return {x: monster.x, y: monster.y, o: monster.o, type: monster.type, target: monster.lastTarget}
 		}),
 		turn: this.turn,
 		wasBusy: this.wasBusyTurn,
