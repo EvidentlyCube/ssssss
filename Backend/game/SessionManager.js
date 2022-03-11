@@ -431,8 +431,11 @@ function undoMoveCheck(session) {
 		session.players[0].nextMoveMeta = null;
 		session.players[1].nextMove = null;
 		session.players[1].nextMoveMeta = null;
+		session.players[0].isDead = false;
+		session.players[1].isDead = false;
 		session.moves.length = 0;
 		initializeRoom(session, session.room.id, true, [], true);
+
 		for (const move of moves) {
 			session.players[0].nextMove = move[0];
 			session.players[1].nextMove = move[1];

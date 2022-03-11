@@ -152,6 +152,8 @@ function getGameLogic(emit) {
 			case ("processed"):
 				currentRoom = data.room;
 				currentTurn = data.room.turn;
+				isPlayerDead[0] = data.room.players[0].isDead;
+				isPlayerDead[1] = data.room.players[1].isDead;
 
 				if (data.room.wasBusy) {
 					renders.clearFLayer();
@@ -321,7 +323,7 @@ function getGameLogic(emit) {
 		$div.removeClass('warning');
 		$move.removeClass('spinner');
 
-		if (move < 97 && isPlayerDead[isYou ? currentPlayer : 1 - currentPlayer]) {
+		if (move < 96 && isPlayerDead[isYou ? currentPlayer : 1 - currentPlayer]) {
 			move = 100;
 		}
 

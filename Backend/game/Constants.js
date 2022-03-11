@@ -11,6 +11,7 @@ const MoveNames =[
 	"CW",
 	"CCW",
 ];
+MoveNames[96] = "Undo Played Move";
 MoveNames[98] = "Next level";
 MoveNames[99] = "Restart";
 
