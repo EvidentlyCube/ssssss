@@ -2,6 +2,5 @@ From Surreal's stream:
 - Go through all rooms and give them difficult level in some scale, and then when selecting the first room to play it should chose from among the easy ones.
 
 Planned changes:
- - ALlow controls with numpad even with disabled numlock
  - Allow solo play
  - Allow room selection

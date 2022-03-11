@@ -45,7 +45,25 @@ MOVE_TO_NAME_WITH_META[98] = "Requesting level: %%";
 var KEY_NAME_MAP = {
 	'Backspace': 101,
 	'u': 96,
-}
+	'Home': 0, // NW
+	'ArrowUp': 1, // N
+	'PageUp': 2, // NE
+	'ArrowLeft': 3, // W
+	'Clear': 4, // Wait
+	'ArrowRight': 5, // E
+	'End': 6, // SW
+	'ArrowDown': 7, // S
+	'PageDown': 8, // SE
+	'7': 0, // NW
+	'8': 1, // N
+	'9': 2, // NE
+	'4': 3, // W
+	'5': 4, // Wait
+	'6': 5, // E
+	'1': 6, // SW
+	'2': 7, // S
+	'3': 8, // SE
+};
 
 var KEY_CODE_MAP = {
 	'36': 0, // NW

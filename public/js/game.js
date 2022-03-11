@@ -47,7 +47,7 @@ function getGameLogic(emit) {
 		renders.clearTransparentLayer();
 		renders.clearFLayer();
 
-		$customEmoteInput.on('keypress', _onKeyPress);
+		$customEmoteInput.on('keydown', _onKeyDown);
 		$customEmoteSend.on('click', _onCustomEmoteClick);
 
 		isPlayerDead[0] = false;
@@ -61,7 +61,7 @@ function getGameLogic(emit) {
 
 	const onDisconnect = () => {
 		$('#gameGrid > .cell').remove();
-		$customEmoteInput.off('keypress', _onKeyPress);
+		$customEmoteInput.off('keydown', _onKeyDown);
 		$customEmoteSend.off('click', _onCustomEmoteClick);
 		$("html").off('keydown', _onHtmlKeypress);
 
@@ -201,7 +201,7 @@ function getGameLogic(emit) {
 		}
 	}
 
-	const _onKeyPress = function (e) {
+	const _onKeyDown = function (e) {
 		if (e.originalEvent.keyCode === 13) {
 			submitCustomEmote();
 			return false;

@@ -5,7 +5,7 @@
     <script src="js/jquery-3.3.1.min.js"></script>
     <script>
 		$(document).ready(function () {
-			$("html").keypress(function (e) {
+			$("html").keydown(function (e) {
 				console.log(e.originalEvent);
 				var texts = [
 					"KeyCode: " + e.originalEvent.keyCode,
