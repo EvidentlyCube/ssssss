@@ -199,7 +199,7 @@ html, body{
     padding: 5px;
 }
 
-.message-box{
+div.message-box{
     padding: 4px 14px;
     font-family: toms_new_romantom, verdana, sans-serif;
     box-sizing: border-box;
@@ -211,18 +211,35 @@ html, body{
     display: none;
 }
 
+#messageSystem{
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(32, 32, 32, 0.6);
+    font-size: 16px;
+    white-space: nowrap;
+    user-select: none;
+    pointer-events: none;
+    display: block;
+    opacity: 0;
+    transition: opacity 200ms ease-in-out;
+}
+#messageSystem span{
+    display: block;
+    margin-top: 10px;
+    font-family: toms_new_romantom, verdana, sans-serif;
+    font-size: 10px;
+}
 #messageOther{
     top: 4px;
     left: 4px;
     background: rgba(255, 255, 0, 0.8);
-    border: 2px solid rgba(64, 64, 0, 0.6);
+    border: 1px solid rgba(32, 32, 0, 0.6);
 
 }
 #messageYou{
     right: 4px;
     bottom: 4px;
     background: rgba(0, 255, 0, 0.8);
-    border: 2px solid rgba(0, 64, 0, 0.6);
+    border: 1px solid rgba(0, 32, 0, 0.6);
 }
 
 #custom-emote-input{

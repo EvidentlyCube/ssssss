@@ -404,9 +404,10 @@
             <div id="column">
                 <div id="gameGrid">
                     <canvas id="canvas-renderer"></canvas>
-                    <div id="messageOther" class="message-box">Partner: IAH O</div>
-                    <div id="messageYou" class="message-box">You: O HAI</div>
                 </div>
+                <div id="messageOther" class="message-box">Partner: IAH O</div>
+                <div id="messageYou" class="message-box">You: O HAI</div>
+                <div id="messageSystem" class="message-box">&ndash;Floor<br>&ndash;Roach (Monster)</div>
             </div>
             <div id="log">
                 <table id="moves">
@@ -489,6 +490,7 @@
                 <li><strong>New feature:</strong> You now see your partner's pointer.</li>
                 <li><strong>New feature:</strong> Tile position is displayed under pointer.</li>
                 <li><strong>New feature:</strong> Hovering over a monster shows who's the current target and the distance to both players.</li>
+                <li><strong>New feature:</strong> Clicking on a tile displays shortened info about a tile, while Ctrl+Click displays the previous big dialog.</li>
                 <li><strong>Improvement:</strong> Smooth movement animation added.</li>
                 <li><strong>Improvement:</strong> Monster distance algorithm has been updated. They'll now look at the distance between the
                     players and chose the one who's closer, and if they both are in the same distance it'll follow the one it was following
@@ -496,6 +498,7 @@
                     to the target.</li>
                 <li><strong>Improvement:</strong> UI improvements - no full-page scrollbars; room display now takes into consideration that Log column
                     takes space and will make itself fit its designated area; log column fixed margins.</li>
+                <li><strong>Improvement:</strong> Sent messages now word wrap correctly and are smaller.</li>
                 <li><strong>Bugfix:</strong> Fixed flickering of ghosts at times.</li>
                 <li><strong>Bugfix:</strong> Undoing death will now work.</li>
             </ul>

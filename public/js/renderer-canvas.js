@@ -52,6 +52,10 @@ var CANVAS_RENDERER = (function() {
 	let isRedrawQueued = false;
 
     return {
+		getMainCanvas: function() {
+			return mainCanvas;
+		},
+
 		refreshMainLayer: function() {
 			if (isRedrawQueued) {
 				return;
