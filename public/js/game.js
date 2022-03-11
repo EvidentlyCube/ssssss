@@ -800,6 +800,7 @@ function getGameLogic(emit) {
 			$emoteSystem.css('opacity', 0);
 			modal.css({display: 'flex'});
 			modal.find('ul')[0].innerHTML = "<li>" + descriptions.join("</li><li>") + "</li>";
+			modal.find('.tilepos')[0].innerText = names[0];
 		}
 	});
 	document.querySelector('canvas').addEventListener('mouseout', e => {
