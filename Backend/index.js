@@ -16,8 +16,11 @@ var Constants = require('./game/Constants');
 var SessionManager = require('./game/SessionManager');
 var RecordStore = require('./game/RecordStore');
 var Config = require('../config');
+var httpsRedirect = require('express-https-redirect');
 
-
+if (Config.redirectToHttps) {
+	app.use('/', httpsRedirect());
+}
 app.use(cors({
 	origin: [
 		"https://drod-online.evidentlycube.com",
