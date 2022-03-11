@@ -35,45 +35,6 @@ html, body{
     position:relative;
 }
 
-#gameGrid .cell{
-    width: 128px;
-    height: 128px;
-    position: relative;
-    background-image: url('../FoundationTiles_128.png?v=1.0.1');
-}
-
-
-#gameGrid .cell .f{
-    width: 128px;
-    height: 128px;
-    position: absolute;
-    background-image: url('../FoundationTiles_128.png?v=1.0.1');
-    display: none;
-}
-#gameGrid .cell .f[class*="g"]{
-    display: block;
-}
-#topLayer,
-#tLayer{
-    position: absolute;
-}
-
-#topLayer .item{
-    width: 128px;
-    height: 128px;
-    position:absolute;
-    background-image: url('../GeneralTiles_128.png?v=1.0.1');
-    z-index: 100;
-}
-
-#tLayer .item{
-    width: 128px;
-    height: 128px;
-    position:absolute;
-    background-image: url('../GeneralTiles_128.png?v=1.0.1');
-    z-index: 80;
-}
-
 #column{
     position: relative;
     display: flex;
