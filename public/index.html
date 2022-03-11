@@ -499,6 +499,7 @@
                 <li><strong>Improvement:</strong> UI improvements - no full-page scrollbars; room display now takes into consideration that Log column
                     takes space and will make itself fit its designated area; log column fixed margins.</li>
                 <li><strong>Improvement:</strong> Sent messages now word wrap correctly and are smaller.</li>
+                <li><strong>Improvement:</strong> Tile info box contains information about monster targetting rules.</li>
                 <li><strong>Bugfix:</strong> Fixed flickering of ghosts at times.</li>
                 <li><strong>Bugfix:</strong> Undoing death will now work.</li>
             </ul>
@@ -566,6 +567,14 @@
             <h3>Tile info</h3>
             <ul>
 
+            </ul>
+            <hr>
+            <h3>Monster targetting rules:</h3>
+            <ul>
+                <li>If the distance between two players is identical, the monster will target the previously targetted player.</li>
+                <li>If the distance between two players is different, the monster will target the one who is closer.</li>
+                <li>L1/Taxicab/Manhattan mesurement is used to calculate the distance, which is the number of horizontal and vertical spaces between two tiles - sum of them.</li>
+                <li>Move your mouse over a monster to see which player they have targetted last as well as the distance to each player.</li>
             </ul>
         </div>
     </div>

@@ -756,13 +756,13 @@ function getGameLogic(emit) {
 
 		if (mousePreviewX === yourPosition.x && mousePreviewY === yourPosition.y) {
 			var order = currentPlayer === 0 ? "(First)" : "(Second)";
-			names.push("<strong>You, " + GAME_BRAIN.playerName + " " + order);
+			names.push("You, " + GAME_BRAIN.playerName + " " + order);
 			descriptions.push("<strong>You, " + GAME_BRAIN.playerName + " " + order + "</strong> - you can move in eight directions and swing your sword. Your job is to clear the room of all the required monsters "
 				+ "and ensure your partner stays alive.");
 		}
 		if (mousePreviewX === friendPosition.x && mousePreviewY === friendPosition.y) {
 			var order = currentPlayer === 1 ? "(First)" : "(Second)";
-			names.push("<strong>Partner, " + GAME_BRAIN.friendName + " " + order);
+			names.push("Partner, " + GAME_BRAIN.friendName + " " + order);
 			descriptions.push("<strong>Partner, " + GAME_BRAIN.friendName + " " + order + "</strong> - they can move in eight directions and swing your sword. Tehir job is to clear the room of all the required monsters "
 				+ "and ensure you stay alive.");
 		}

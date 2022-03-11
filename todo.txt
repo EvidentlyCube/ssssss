@@ -1,6 +1,5 @@
 From Surreal's stream:
 - Also add tile position to Tile Description popup
-- Also in the Tile Description add info about how monsters chase closest player
 - Go through all rooms and give them difficult level in some scale, and then when selecting the first room to play it should chose from among the easy ones.
 
 Planned changes:

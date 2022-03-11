@@ -485,6 +485,14 @@ hr {
     justify-content: center;
 }
 
+.info-box hr {
+    border: none;
+    height: 3px;
+    background: rgba(131, 126, 0, 1);
+    margin: 2em 0;
+}
+
+
 .info-box > div {
     width: 80vw;
     height: 80vh;
