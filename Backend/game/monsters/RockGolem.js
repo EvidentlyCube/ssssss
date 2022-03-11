@@ -7,18 +7,26 @@ const RockGolem = function(x, y, o){
 	this.y = y;
 	this.o = o;
 
+	this.lastTarget = null;
 	this.type = Constants.MonsterTypes.RockGolem;
 	this.isRequired = true;
 	this.isSwordVulnerable = true;
 };
 
 
+RockGolem.prototype.updateTarget = function(room) {
+	var target = room.getTarget(this.x, this.y, this.lastTarget);
+	this.lastTarget = room.getPlayerIndex(target);
+
+	return target;
+}
+
 RockGolem.prototype.process = function(room){
 	if (this.type == Constants.MonsterTypes.RockGolemPile){
 		return;
 	}
 
-	var target = room.getTarget(this.x, this.y);
+	const target = this.updateTarget(room);
 
 	var deltaX = Math.sign(target.x - this.x);
 	var deltaY = Math.sign(target.y - this.y);

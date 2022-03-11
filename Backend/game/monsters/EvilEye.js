@@ -7,6 +7,7 @@ const EvilEye = function (x, y, o) {
 	this.y = y;
 	this.o = o;
 
+	this.lastTarget = null;
 	this.isActive = false;
 	this.isRequired = true;
 	this.isSwordVulnerable = true;
@@ -15,12 +16,19 @@ const EvilEye = function (x, y, o) {
 };
 
 
+EvilEye.prototype.updateTarget = function(room) {
+	var target = room.getTarget(this.x, this.y, this.lastTarget);
+	this.lastTarget = room.getPlayerIndex(target);
+
+	return target;
+}
+
 EvilEye.prototype.process = function (room) {
 	if (!this.isActive && !this._spotPlayer(room)) {
 		return;
 	}
 
-	const target = room.getTarget(this.x, this.y);
+	const target = this.updateTarget(room);
 
 	const deltaX = Math.sign(target.x - this.x);
 	const deltaY = Math.sign(target.y - this.y);

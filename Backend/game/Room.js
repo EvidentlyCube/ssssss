@@ -38,6 +38,10 @@ const Room = function (player1, player2, id) {
 	this.monsters = [];
 };
 
+Room.prototype.getPlayerIndex = function(player) {
+	return this.players.indexOf(player);
+}
+
 Room.prototype.killAllMonsters = function(){
 	this.monsters.concat().forEach(monster => this.killMonster(monster));
 };
@@ -209,18 +213,19 @@ Room.prototype.swapTile = function (fromType, toType) {
 	}
 };
 
-Room.prototype.getTarget = function (x, y) {
+Room.prototype.getTarget = function (x, y, lastTarget) {
 	const p1Dist = this.players[0].isDead ? 99999999 : this.getDistance(x, y, this.players[0].x, this.players[0].y);
 	const p2Dist = this.players[1].isDead ? 99999999 : this.getDistance(x, y, this.players[1].x, this.players[1].y);
+
+	if (p1Dist === p2Dist) {
+		return this.players[lastTarget || 0];
+	}
 
 	return this.players[p1Dist <= p2Dist ? 0 : 1];
 };
 
 Room.prototype.getDistance = function (x1, y1, x2, y2) {
-	const lInf = Math.max(Math.abs(x1 - x2), Math.abs(y1 - y2));
-	const l1 = Math.abs(x2 - x1) + Math.abs(y2 - y1);
-
-	return lInf + (l1 / 1000);
+	return Math.abs(x2 - x1) + Math.abs(y2 - y1);
 };
 
 Room.prototype.stepOnPlate = function (x, y) {
