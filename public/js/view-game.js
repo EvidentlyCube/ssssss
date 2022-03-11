@@ -1,5 +1,6 @@
 const VIEW_GAME = (function () {
     const GAME_EDGE = 2560;
+    const LOG_WIDTH = 405;
 
     let gameLogic = null;
 
@@ -14,7 +15,7 @@ const VIEW_GAME = (function () {
     }
 
     const onResize = () => {
-        const minSize = Math.min(window.innerWidth, window.innerHeight);
+        const minSize = Math.min(window.innerWidth - LOG_WIDTH, window.innerHeight);
         const margin = (GAME_EDGE - minSize)/2;
         document.querySelector('#gameGrid').style.transform = `scale(${(minSize / GAME_EDGE)})`;
         document.querySelector('#gameGrid').style.margin = `-${margin}px`;

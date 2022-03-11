@@ -22,6 +22,7 @@ h3, input, button {
 html, body{
     padding: 0;
     margin: 0;
+    overflow: hidden;
 }
 
 #gameGrid{
@@ -82,10 +83,11 @@ html, body{
 #log{
     width: 400px;
     height: 100vh;
-    margin-left: 1em;
+    padding: 0 1em;
     font-size: 14px;
     color: white;
     overflow-y: auto;
+    box-sizing: border-box;
 }
 
 #log li:nth-child(2){
