@@ -28,7 +28,9 @@ const VIEW_GAME = (function () {
     return {
         activate: () => {
             SOCKET_API.onData.add(onData);
-            gameLogic = getGameLogic(SOCKET_API.emit);
+            if (!gameLogic) {
+                gameLogic = getGameLogic(SOCKET_API.emit);
+            }
             gameLogic.onConnect();
             onResize();
             window.addEventListener('resize', onResize);
