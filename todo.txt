@@ -1,7 +1,6 @@
 
 Todo:
  - Check some wall tiles for weird corners and edges
- - Room completion displays the same for both players
 
 Planned changes:
  - Allow solo play

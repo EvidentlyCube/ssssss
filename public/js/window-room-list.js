@@ -26,10 +26,6 @@ const WINDOW_ROOM_LIST = (function () {
         document.querySelectorAll('#list-of-rooms .room-row').forEach(x => x.remove());
 
         const $container = document.querySelector('#list-of-rooms');
-        GAME_BRAIN.completedRooms.push('Royal Dance')
-        GAME_BRAIN.completedRooms.push('Crossroads')
-        GAME_BRAIN.friendCompletedRooms.push('Crossroads')
-        GAME_BRAIN.friendCompletedRooms.push('Bridge Assault')
 
         GAME_BRAIN.rooms.forEach(room => {
             const $div = document.createElement('div');
