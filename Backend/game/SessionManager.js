@@ -383,14 +383,16 @@ function tryToUpdateSession(session) {
 		storeRoomCompleted(session);
 	}
 
-	sendRoomState(session);
+	sendRoomState(session, false);
 
 	session.log("Turn data sent");
 }
 
-function sendRoomState(session) {
-	SessionManager.emit(session.players[0], "data", { type: "processed", room: session.room.toJson() });
-	SessionManager.emit(session.players[1], "data", { type: "processed", room: session.room.toJson() });
+function sendRoomState(session, skipAnimation) {
+	skipAnimation = skipAnimation;
+	const animationOffset = skipAnimation ? 1 : 0;
+	SessionManager.emit(session.players[0], "data", { type: "processed", animationOffset, room: session.room.toJson() });
+	SessionManager.emit(session.players[1], "data", { type: "processed", animationOffset, room: session.room.toJson() });
 }
 
 function restartCheck(session) {
@@ -444,7 +446,7 @@ function undoMoveCheck(session) {
 
 		session.moves.push(...moves);
 		session.room.wasBusyTurn = true;
-		sendRoomState(session);
+		sendRoomState(session, true);
 
 		return true;
 	}
@@ -524,6 +526,11 @@ function swapCheck(session) {
 			players[0] = players[1];
 			players[1] = tmp;
 
+			players[0].prevX = players[0].x;
+			players[0].prevY = players[0].y;
+			players[1].prevX = players[1].x;
+			players[1].prevY = players[1].y;
+
 			players[1].x = players[0].x;
 			players[1].y = players[0].y;
 			players[1].o = players[0].o;
@@ -536,7 +543,7 @@ function swapCheck(session) {
 		}
 		SessionManager.emit(session.players[0], "data", { type: "swap", player: 0 });
 		SessionManager.emit(session.players[1], "data", { type: "swap", player: 1 });
-		sendRoomState(session);
+		sendRoomState(session, false);
 		return true;
 	}
 

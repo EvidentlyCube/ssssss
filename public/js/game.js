@@ -165,6 +165,7 @@ function getGameLogic(emit) {
 				currentTurn = data.room.turn;
 				isPlayerDead[0] = data.room.players[0].isDead;
 				isPlayerDead[1] = data.room.players[1].isDead;
+				animationOffset = data.animationOffset;
 
 				if (data.room.wasBusy) {
 					renders.clearFLayer();
@@ -173,8 +174,7 @@ function getGameLogic(emit) {
 				}
 
 				renders.clearTopLayer();
-				renderer.animateTopLayer(renders.topLayerAnimate, data.room, currentPlayer, 0);
-				animationOffset = 0;
+				renderer.animateTopLayer(renders.topLayerAnimate, data.room, currentPlayer, animationOffset);
 				yourPosition = data.room.players[currentPlayer];
 				friendPosition = data.room.players[1-currentPlayer];
 				renders.clearGhosts();
