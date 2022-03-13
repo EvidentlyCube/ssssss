@@ -517,8 +517,22 @@ function swapCheck(session) {
 		{ // Room Swap
 			const {players} = session.room;
 			const tmp = players[0];
+			const tmpX = players[0].x;
+			const tmpY = players[0].y;
+			const tmpO = players[0].o;
+			const tmpDead = players[0].isDead;
 			players[0] = players[1];
 			players[1] = tmp;
+
+			players[1].x = players[0].x;
+			players[1].y = players[0].y;
+			players[1].o = players[0].o;
+			players[1].isDead = players[0].isDead;
+			players[0].x = tmpX;
+			players[0].y = tmpY;
+			players[0].o = tmpO;
+			players[0].isDead = tmpDead;
+
 		}
 		SessionManager.emit(session.players[0], "data", { type: "swap", player: 0 });
 		SessionManager.emit(session.players[1], "data", { type: "swap", player: 1 });
