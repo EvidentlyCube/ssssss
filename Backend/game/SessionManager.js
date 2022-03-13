@@ -504,13 +504,22 @@ function swapCheck(session) {
 	const isSwapLevelling = session.players.map(x => x.nextMove == Constants.Moves.Swap);
 
 	if (isSwapLevelling[0] && isSwapLevelling[1]) {
-		const tmp = session.players[0];
-		session.players[0] = session.players[1];
-		session.players[1] = tmp;
-		session.players[0].nextMove = null;
-		session.players[0].nextMoveMeta = null;
-		session.players[1].nextMove = null;
-		session.players[1].nextMoveMeta = null;
+		{ // Game Swap
+			const {players} = session;
+			const tmp = players[0];
+			players[0] = players[1];
+			players[1] = tmp;
+			players[0].nextMove = null;
+			players[0].nextMoveMeta = null;
+			players[1].nextMove = null;
+			players[1].nextMoveMeta = null;
+		}
+		{ // Room Swap
+			const {players} = session.room;
+			const tmp = players[0];
+			players[0] = players[1];
+			players[1] = tmp;
+		}
 		SessionManager.emit(session.players[0], "data", { type: "swap", player: 0 });
 		SessionManager.emit(session.players[1], "data", { type: "swap", player: 1 });
 		sendRoomState(session);
