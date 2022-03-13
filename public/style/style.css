@@ -100,33 +100,6 @@ html, body{
     width: 100%;
 }
 
-#column .box{
-    position: relative;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    padding: 8px;
-    -webkit-box-flex: 1;
-    -ms-flex: 1 0 20%;
-    flex: 1 0 20%;
-}
-
-#column header{
-    color: #888;
-    font-size: 11px;
-    border-bottom: 1px solid #888;
-    width: 80%;
-    padding-left: 10px;
-    white-space: nowrap;
-}
-
-#column p{
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    padding: 10px;
-    margin: 0;
-    min-height: 40px;
-}
-
 .warning .move{
     animation-name: flash;
     animation-timing-function: ease-out;
@@ -185,18 +158,6 @@ html, body{
     border-top-color: #333;
     -webkit-animation: spinner .6s linear infinite;
     animation: spinner .6s linear infinite;
-}
-
-#emotes-header{
-    padding-left: 20px;
-}
-
-#emotes{
-    padding-left: 20px;
-}
-#emotes button{
-    width: 90px;
-    padding: 5px;
 }
 
 div.message-box{
