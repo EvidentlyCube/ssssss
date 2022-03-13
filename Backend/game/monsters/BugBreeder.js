@@ -2,7 +2,7 @@ const Constants = require('../Constants');
 const Utils = require('../Utils');
 
 
-const RoachQueen = function(x, y, o){
+const BugBreeder = function(x, y, o){
 	this.x = x;
 	this.y = y;
 	this.o = o;
@@ -10,20 +10,20 @@ const RoachQueen = function(x, y, o){
 	this.prevY = y;
 
 	this.lastTarget = null;
-	this.type = Constants.MonsterTypes.RoachQueen;
+	this.type = Constants.MonsterTypes.BugBreeder;
 	this.isRequired = true;
 	this.isSwordVulnerable = true;
 };
 
 
-RoachQueen.prototype.updateTarget = function(room) {
+BugBreeder.prototype.updateTarget = function(room) {
 	var target = room.getTarget(this.x, this.y, this.lastTarget);
 	this.lastTarget = room.getPlayerIndex(target);
 
 	return target;
 }
 
-RoachQueen.prototype.process = function(room){
+BugBreeder.prototype.process = function(room){
 	const target = this.updateTarget(room);
 
 	var deltaX = -Math.sign(target.x - this.x);
@@ -51,13 +51,13 @@ RoachQueen.prototype.process = function(room){
 
 			if (this.canLieEgg(room, layX, layY, oldX, oldY)){
 				room.stepOnPlate(layX, layY);
-				room.addMonster(layX, layY, 0, Constants.MonsterTypes.RoachEgg);
+				room.addMonster(layX, layY, 0, Constants.MonsterTypes.BugEgg);
 			}
 		}
 	}
 };
 
-RoachQueen.prototype.canLieEgg = function(room, x, y, oldX, oldY){
+BugBreeder.prototype.canLieEgg = function(room, x, y, oldX, oldY){
 	if (x == oldX && y == oldY){
 		return false;
 	}
@@ -70,7 +70,7 @@ RoachQueen.prototype.canLieEgg = function(room, x, y, oldX, oldY){
 		|| oTile == Constants.TileTypes.YellowDoorUp
 		|| oTile == Constants.TileTypes.Trapdoor
 		|| oTile == Constants.TileTypes.RedDoorUp
-		|| oTile == Constants.TileTypes.Tar
+		|| oTile == Constants.TileTypes.Resin
 		|| oTile == Constants.TileTypes.BlackDoorUp
 	){
 		return false;
@@ -93,7 +93,7 @@ RoachQueen.prototype.canLieEgg = function(room, x, y, oldX, oldY){
 	return true;
 };
 
-RoachQueen.prototype._tryToMove = function(room, deltaX, deltaY){
+BugBreeder.prototype._tryToMove = function(room, deltaX, deltaY){
 	const newX = this.x + deltaX;
 	const newY = this.y + deltaY;
 
@@ -117,4 +117,4 @@ RoachQueen.prototype._tryToMove = function(room, deltaX, deltaY){
 };
 
 
-module.exports = RoachQueen;
+module.exports = BugBreeder;

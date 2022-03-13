@@ -95,7 +95,7 @@ function loadRoom(roomXml, author) {
 			}
 
 			switch(t){
-				case 35: room.tLayer[x][y] = Constants.TileTypes.Tar; break;
+				case 35: room.tLayer[x][y] = Constants.TileTypes.Resin; break;
 			}
 		}
 	}
@@ -103,12 +103,12 @@ function loadRoom(roomXml, author) {
 		let type = null;
 
 		switch(monsterXml.getAttribute('Type').toString()){
-			case "0": type = Constants.MonsterTypes.Roach; break;
-			case "1": type = Constants.MonsterTypes.RoachQueen; break;
-			case "6": type = Constants.MonsterTypes.EvilEye; break;
-			case "9": type = Constants.MonsterTypes.TarBaby; break;
-			case "15": type = Constants.MonsterTypes.RockGolem; room.rockGolemHack = true; break;
-			case "21": type = Constants.MonsterTypes.Wubba; break;
+			case "0": type = Constants.MonsterTypes.Bug; break;
+			case "1": type = Constants.MonsterTypes.BugBreeder; break;
+			case "6": type = Constants.MonsterTypes.Gazer; break;
+			case "9": type = Constants.MonsterTypes.ResinSpawn; break;
+			case "15": type = Constants.MonsterTypes.AnimatedRocks; room.rockGolemHack = true; break;
+			case "21": type = Constants.MonsterTypes.Blocker; break;
 			case "19":
 				room.players[0] = {
 					x: parseInt(monsterXml.getAttribute("X")),

@@ -2,7 +2,7 @@ const Constants = require('../Constants');
 const Utils = require('../Utils');
 
 
-const TarBaby = function(x, y, o){
+const ResinSpawn = function(x, y, o){
 	this.x = x;
 	this.y = y;
 	this.o = o;
@@ -10,12 +10,12 @@ const TarBaby = function(x, y, o){
 	this.prevY = y;
 
 	this.lastTarget = null;
-	this.type = Constants.MonsterTypes.TarBaby;
+	this.type = Constants.MonsterTypes.ResinSpawn;
 	this.isRequired = true;
 	this.isSwordVulnerable = true;
 };
 
-TarBaby.prototype.updateTarget = function(room) {
+ResinSpawn.prototype.updateTarget = function(room) {
 	var target = room.getTarget(this.x, this.y, this.lastTarget);
 	this.lastTarget = room.getPlayerIndex(target);
 
@@ -23,7 +23,7 @@ TarBaby.prototype.updateTarget = function(room) {
 }
 
 
-TarBaby.prototype.process = function(room){
+ResinSpawn.prototype.process = function(room){
 	const target = this.updateTarget(room);
 
 	var deltaX = Math.sign(target.x - this.x);
@@ -38,7 +38,7 @@ TarBaby.prototype.process = function(room){
 	)
 };
 
-TarBaby.prototype._tryToMove = function(room, deltaX, deltaY){
+ResinSpawn.prototype._tryToMove = function(room, deltaX, deltaY){
 	const newX = this.x + deltaX;
 	const newY = this.y + deltaY;
 
@@ -62,4 +62,4 @@ TarBaby.prototype._tryToMove = function(room, deltaX, deltaY){
 };
 
 
-module.exports = TarBaby;
+module.exports = ResinSpawn;

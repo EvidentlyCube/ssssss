@@ -2,7 +2,7 @@ const Constants = require('../Constants');
 const Utils = require('../Utils');
 
 
-const EvilEye = function (x, y, o) {
+const Gazer = function (x, y, o) {
 	this.x = x;
 	this.y = y;
 	this.o = o;
@@ -14,18 +14,18 @@ const EvilEye = function (x, y, o) {
 	this.isRequired = true;
 	this.isSwordVulnerable = true;
 
-	this.type = Constants.MonsterTypes.EvilEye;
+	this.type = Constants.MonsterTypes.Gazer;
 };
 
 
-EvilEye.prototype.updateTarget = function(room) {
+Gazer.prototype.updateTarget = function(room) {
 	var target = room.getTarget(this.x, this.y, this.lastTarget);
 	this.lastTarget = room.getPlayerIndex(target);
 
 	return target;
 }
 
-EvilEye.prototype.process = function (room) {
+Gazer.prototype.process = function (room) {
 	if (!this.isActive && !this._spotPlayer(room)) {
 		return;
 	}
@@ -44,7 +44,7 @@ EvilEye.prototype.process = function (room) {
 	)
 };
 
-EvilEye.prototype._spotPlayer = function (room) {
+Gazer.prototype._spotPlayer = function (room) {
 	const dX = Utils.dirX(this.o);
 	const dY = Utils.dirY(this.o);
 
@@ -79,7 +79,7 @@ EvilEye.prototype._spotPlayer = function (room) {
 	}
 };
 
-EvilEye.prototype._tryToMove = function (room, deltaX, deltaY) {
+Gazer.prototype._tryToMove = function (room, deltaX, deltaY) {
 	const newX = this.x + deltaX;
 	const newY = this.y + deltaY;
 
@@ -103,4 +103,4 @@ EvilEye.prototype._tryToMove = function (room, deltaX, deltaY) {
 };
 
 
-module.exports = EvilEye;
+module.exports = Gazer;

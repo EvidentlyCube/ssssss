@@ -1,12 +1,12 @@
 const Constants = require('./Constants');
 const Utils = require('./Utils');
-const Roach = require('./monsters/Roach');
-const RoachQueen = require('./monsters/RoachQueen');
-const RoachEgg = require('./monsters/RoachEgg');
-const EvilEye = require('./monsters/EvilEye');
-const Wubba = require('./monsters/Wubba');
-const RockGolem = require('./monsters/RockGolem');
-const TarBaby = require('./monsters/TarBaby');
+const Bug = require('./monsters/Bug');
+const BugBreeder = require('./monsters/BugBreeder');
+const BugEgg = require('./monsters/BugEgg');
+const Gazer = require('./monsters/Gazer');
+const Blocker = require('./monsters/Blocker');
+const AnimatedRocks = require('./monsters/AnimatedRocks');
+const ResinSpawn = require('./monsters/ResinSpawn');
 
 const Room = function (player1, player2, id) {
 	this.id = id;
@@ -87,7 +87,7 @@ Room.prototype.isBlockedByObstacle = function (startX, startY, direction) {
 		|| tile == Constants.TileTypes.Pit
 		|| tile == Constants.TileTypes.RedDoorUp
 		|| tile == Constants.TileTypes.BlackDoorUp
-		|| tileT == Constants.TileTypes.Tar;
+		|| tileT == Constants.TileTypes.Resin;
 };
 
 Room.prototype.tryToEatPlayer = function (x, y) {
@@ -112,14 +112,14 @@ Room.prototype.attackTile = function (x, y) {
 		}
 	}
 
-	if (this.isVulnerableTar(x, y, Constants.TileTypes.Tar)) {
+	if (this.isVulnerableTar(x, y, Constants.TileTypes.Resin)) {
 		this.tarCuts.push({x: x, y: y});
 	}
 };
 
 Room.prototype.killMonster = function (monster) {
 	switch (monster.type) {
-		case Constants.MonsterTypes.RockGolem:
+		case Constants.MonsterTypes.AnimatedRocks:
 			monster.type = Constants.MonsterTypes.RockGolemPile;
 			monster.isRequired = false;
 			monster.isSwordVulnerable = false;
@@ -332,26 +332,26 @@ Room.prototype.areAllMonstersDead = function () {
 
 Room.prototype.addMonster = function (x, y, o, type) {
 	switch (type) {
-		case Constants.MonsterTypes.Roach:
-			this.monsters.push(new Roach(x, y, o));
+		case Constants.MonsterTypes.Bug:
+			this.monsters.push(new Bug(x, y, o));
 			break;
-		case Constants.MonsterTypes.RoachQueen:
-			this.monsters.push(new RoachQueen(x, y, o));
+		case Constants.MonsterTypes.BugBreeder:
+			this.monsters.push(new BugBreeder(x, y, o));
 			break;
-		case Constants.MonsterTypes.RoachEgg:
-			this.monsters.push(new RoachEgg(x, y, o));
+		case Constants.MonsterTypes.BugEgg:
+			this.monsters.push(new BugEgg(x, y, o));
 			break;
-		case Constants.MonsterTypes.EvilEye:
-			this.monsters.push(new EvilEye(x, y, o));
+		case Constants.MonsterTypes.Gazer:
+			this.monsters.push(new Gazer(x, y, o));
 			break;
-		case Constants.MonsterTypes.Wubba:
-			this.monsters.push(new Wubba(x, y, o));
+		case Constants.MonsterTypes.Blocker:
+			this.monsters.push(new Blocker(x, y, o));
 			break;
-		case Constants.MonsterTypes.RockGolem:
-			this.monsters.push(new RockGolem(x, y, o));
+		case Constants.MonsterTypes.AnimatedRocks:
+			this.monsters.push(new AnimatedRocks(x, y, o));
 			break;
-		case Constants.MonsterTypes.TarBaby:
-			this.monsters.push(new TarBaby(x, y, o));
+		case Constants.MonsterTypes.ResinSpawn:
+			this.monsters.push(new ResinSpawn(x, y, o));
 			break;
 	}
 };
@@ -423,7 +423,7 @@ Room.prototype.destroyUnstableTar = function(x, y, tarType){
 		this.tilesT[x][y] = 0;
 
 		if (!this.isTarCutTile(x, y) && !this.isBlockedBySword(x, y, null)){
-			this.addMonster(x, y, Constants.Moves.N, Constants.MonsterTypes.TarBaby);
+			this.addMonster(x, y, Constants.Moves.N, Constants.MonsterTypes.ResinSpawn);
 		}
 
 		this.destroyUnstableTarAround(x, y, tarType);
@@ -462,7 +462,7 @@ Room.prototype.process = function (SessionManager) {
 		this.destroyUnstableTarAround(position.x, position.y, tarType);
 	});
 
-	if (this.tarCuts.length > 0 && !this.hasTile(Constants.TileTypes.Tar)){
+	if (this.tarCuts.length > 0 && !this.hasTile(Constants.TileTypes.Resin)){
 		this.swapTile(Constants.TileTypes.BlackDoorUp, Constants.TileTypes.BlackDoorDown);
 	}
 

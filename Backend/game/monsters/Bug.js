@@ -2,7 +2,7 @@ const Constants = require('../Constants');
 const Utils = require('../Utils');
 
 
-const Wubba = function(x, y, o){
+const Bug = function(x, y, o){
 	this.x = x;
 	this.y = y;
 	this.o = o;
@@ -10,19 +10,19 @@ const Wubba = function(x, y, o){
 	this.prevY = y;
 
 	this.lastTarget = null;
-	this.type = Constants.MonsterTypes.Wubba;
-	this.isRequired = false;
-	this.isSwordVulnerable = false;
+	this.type = Constants.MonsterTypes.Bug;
+	this.isRequired = true;
+	this.isSwordVulnerable = true;
 };
 
-Wubba.prototype.updateTarget = function(room) {
+Bug.prototype.updateTarget = function(room) {
 	var target = room.getTarget(this.x, this.y, this.lastTarget);
 	this.lastTarget = room.getPlayerIndex(target);
 
 	return target;
 }
 
-Wubba.prototype.process = function(room){
+Bug.prototype.process = function(room){
 	const target = this.updateTarget(room);
 
 	var deltaX = Math.sign(target.x - this.x);
@@ -30,10 +30,14 @@ Wubba.prototype.process = function(room){
 
 	this.o = Utils.dirFromXY(deltaX, deltaY);
 
-	this._tryToMove(room, deltaX, deltaY);
+	(
+		this._tryToMove(room, deltaX, deltaY)
+		|| this._tryToMove(room, 0, deltaY)
+		|| this._tryToMove(room, deltaX, 0)
+	)
 };
 
-Wubba.prototype._tryToMove = function(room, deltaX, deltaY){
+Bug.prototype._tryToMove = function(room, deltaX, deltaY){
 	const newX = this.x + deltaX;
 	const newY = this.y + deltaY;
 
@@ -43,7 +47,6 @@ Wubba.prototype._tryToMove = function(room, deltaX, deltaY){
 		room.isBlockedByMonster(newX, newY)
 		|| room.isBlockedByObstacle(this.x, this.y, moveO)
 		|| room.isBlockedBySword(newX, newY, this)
-		|| room.isBlockedByPlayer(newX, newY)
 	){
 		return false;
 	}
@@ -51,10 +54,11 @@ Wubba.prototype._tryToMove = function(room, deltaX, deltaY){
 	this.x = newX;
 	this.y = newY;
 
+	room.tryToEatPlayer(newX, newY);
 	room.stepOnPlate(newX, newY);
 
 	return true;
 };
 
 
-module.exports = Wubba;
+module.exports = Bug;

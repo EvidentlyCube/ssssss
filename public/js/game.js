@@ -671,13 +671,13 @@ function getGameLogic(emit) {
 				break;
 
 			case 11:
-				names.push('Black Gate (Closed)');
-				descriptions.push("<strong>Closed Black Gate</strong> - Acts like <strong>Wall</strong>, will open when all <strong>Tar</strong> is cleared.")
+				names.push('Resin Gate (Closed)');
+				descriptions.push("<strong>Closed Resin Gate</strong> - Acts like <strong>Wall</strong>, will open when all <strong>Resin</strong> is cleared.")
 				break;
 
 			case 12:
-				names.push('Black Gate (Open)');
-				descriptions.push("<strong>Open Black Gate</strong> - Acts like <strong>Floor</strong>, will close when all <strong>Tar</strong> is cleared.")
+				names.push('Resin Gate (Open)');
+				descriptions.push("<strong>Open Resin Gate</strong> - Acts like <strong>Floor</strong>, will close when all <strong>Resin</strong> is cleared.")
 				break;
 		}
 
@@ -697,8 +697,8 @@ function getGameLogic(emit) {
 
 		switch(currentRoom.tilesT[mousePreviewX][mousePreviewY]) {
 			case 10:
-				names.push('Tar');
-				descriptions.push("<strong>Tar</strong> - Can only be cut on flat edges. Any blob of tar that's smaller than 2x2 will turn into tar babies. "
+				names.push('Resin');
+				descriptions.push("<strong>Resin</strong> - Can only be cut on flat edges. Any blob of Resin that's smaller than 2x2 will turn into <strong>Resin Spawns</strong>. "
 				 + "Can be simutlaneously stabbed in two places by two players to carve different shapes'");
 				break;
 		}
@@ -716,8 +716,8 @@ function getGameLogic(emit) {
 						+ "Will kill the player upon stepping on their tile. Is blocked by swords. Can be killed by moving your sword onto its tile (either by stepping or rotating).");
 						break;
 				case (4):
-					names.push('Bug Queen ('+(i+1)+')');
-					descriptions.push("<strong>Bug Queen (monster)</strong> - Runs away from the closest player. If a diagonal move is blocked it'll prefer to move vertically than horizontally, if possible. "
+					names.push('Bug Breeder ('+(i+1)+')');
+					descriptions.push("<strong>Bug Breeder (monster)</strong> - Runs away from the closest player. If a diagonal move is blocked it'll prefer to move vertically than horizontally, if possible. "
 						+ "Will never attack the player. Every 30 turns it'll lay eggs around it that hatch into Raoches in 4 turns.");
 						break;
 
@@ -746,8 +746,8 @@ function getGameLogic(emit) {
 						break;
 
 				case (9):
-					names.push('Tar Spawn ('+(i+1)+')');
-					descriptions.push("<strong>Tar Spawn (monster)</strong> - Behaves exactly like a Bug. Is spawned from cutting tar.");
+					names.push('Resin Spawn ('+(i+1)+')');
+					descriptions.push("<strong>Resin Spawn (monster)</strong> - Behaves exactly like a Bug. Is spawned from cutting <strong>Resin</strong<.");
 					break;
 
 				case (10):
@@ -757,7 +757,7 @@ function getGameLogic(emit) {
 					break;
 
 				case (11):
-					names.push('Rocks Pile');
+					names.push('Rock Pile');
 					descriptions.push("<strong>Rock Pile</strong> - Acts like a <strong>Wall</strong>.");
 					break;
 			}

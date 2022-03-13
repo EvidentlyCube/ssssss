@@ -2,7 +2,7 @@ const Constants = require('../Constants');
 const Utils = require('../Utils');
 
 
-const RockGolem = function(x, y, o){
+const AnimatedRocks = function(x, y, o){
 	this.x = x;
 	this.y = y;
 	this.o = o;
@@ -10,20 +10,20 @@ const RockGolem = function(x, y, o){
 	this.prevY = y;
 
 	this.lastTarget = null;
-	this.type = Constants.MonsterTypes.RockGolem;
+	this.type = Constants.MonsterTypes.AnimatedRocks;
 	this.isRequired = true;
 	this.isSwordVulnerable = true;
 };
 
 
-RockGolem.prototype.updateTarget = function(room) {
+AnimatedRocks.prototype.updateTarget = function(room) {
 	var target = room.getTarget(this.x, this.y, this.lastTarget);
 	this.lastTarget = room.getPlayerIndex(target);
 
 	return target;
 }
 
-RockGolem.prototype.process = function(room){
+AnimatedRocks.prototype.process = function(room){
 	if (this.type == Constants.MonsterTypes.RockGolemPile){
 		return;
 	}
@@ -38,7 +38,7 @@ RockGolem.prototype.process = function(room){
 	this._tryToMove(room, deltaX, deltaY);
 };
 
-RockGolem.prototype._tryToMove = function(room, deltaX, deltaY){
+AnimatedRocks.prototype._tryToMove = function(room, deltaX, deltaY){
 	const newX = this.x + deltaX;
 	const newY = this.y + deltaY;
 
@@ -62,4 +62,4 @@ RockGolem.prototype._tryToMove = function(room, deltaX, deltaY){
 };
 
 
-module.exports = RockGolem;
+module.exports = AnimatedRocks;
