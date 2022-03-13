@@ -3,7 +3,6 @@ var GAME_HEIGHT = 20;
 var TILE_EDGE = 128;
 
 var GAME_VERSION = 6;
-var LOG_LEVEL = 1;
 
 var MOVE_TO_NAME = [
 	"North West",
@@ -33,6 +32,7 @@ var AUTO_ACCEPT_INVITE = urlParts.autoAcceptInvite;
 var AUTO_NAME = urlParts.autoName;
 var AUTO_INVITE_ANYONE = urlParts.autoInviteAnyone;
 var SHOW_CANVAS = urlParts.showCanvas;
+var LOG_LEVEL = Math.max(0, Math.min(4, parseInt(urlParts.log)));
 
 MOVE_TO_NAME[96] = "Requesting undoing last move";
 MOVE_TO_NAME[97] = "Requesting swap";
