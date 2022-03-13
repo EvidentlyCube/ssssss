@@ -6,6 +6,8 @@ const RoachEgg = function(x, y, o){
 	this.x = x;
 	this.y = y;
 	this.o = o;
+	this.prevX = x;
+	this.prevY = y;
 
 	this.type = Constants.MonsterTypes.RoachEgg;
 	this.justLied = true;

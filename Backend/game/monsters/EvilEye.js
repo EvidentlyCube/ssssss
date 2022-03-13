@@ -6,6 +6,8 @@ const EvilEye = function (x, y, o) {
 	this.x = x;
 	this.y = y;
 	this.o = o;
+	this.prevX = x;
+	this.prevY = y;
 
 	this.lastTarget = null;
 	this.isActive = false;
