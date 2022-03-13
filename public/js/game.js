@@ -47,8 +47,14 @@ function getGameLogic(emit) {
 		renders.clearTransparentLayer();
 		renders.clearFLayer();
 
+		document.addEventListener('go-to-room', onGoToRoom);
+		document.querySelector('canvas').addEventListener('mousemove', onMouseMove);
+		document.querySelector('canvas').addEventListener('click', onCanvasClick);
+		document.querySelector('canvas').addEventListener('click', onCanvasClick);
+		document.querySelector('canvas').addEventListener('mouseout', onCanvasMouseOut);
 		$customEmoteInput.on('keydown', _onKeyDown);
 		$customEmoteSend.on('click', _onCustomEmoteClick);
+		$("html").on('keydown', _onHtmlKeypress);
 
 		isPlayerDead[0] = false;
 		isPlayerDead[1] = false;
@@ -60,7 +66,11 @@ function getGameLogic(emit) {
 	};
 
 	const onDisconnect = () => {
-		$('#gameGrid > .cell').remove();
+		document.removeEventListener('go-to-room', onGoToRoom);
+		document.querySelector('canvas').removeEventListener('mousemove', onMouseMove);
+		document.querySelector('canvas').removeEventListener('click', onCanvasClick);
+		document.querySelector('canvas').removeEventListener('click', onCanvasClick);
+		document.querySelector('canvas').removeEventListener('mouseout', onCanvasMouseOut);
 		$customEmoteInput.off('keydown', _onKeyDown);
 		$customEmoteSend.off('click', _onCustomEmoteClick);
 		$("html").off('keydown', _onHtmlKeypress);
@@ -270,7 +280,6 @@ function getGameLogic(emit) {
 		}
 	};
 
-	$("html").on('keydown', _onHtmlKeypress);
 
 	function emitCurrentMove(move, meta) {
 		emit('move', {
@@ -416,10 +425,10 @@ function getGameLogic(emit) {
 		$customEmoteInput.blur();
 	}
 
-	document.addEventListener('go-to-room', e => {
+	function onGoToRoom(e) {
 		updateMove(98, true, e.roomName);
 		emitCurrentMove(98, e.roomName);
-	});
+	}
 
 	function cleverTextDraw(layer, tileX, tileY, text, color, shadows) {
 		shadows = shadows || 1;
@@ -574,7 +583,7 @@ function getGameLogic(emit) {
 		CANVAS_RENDERER.refreshMainLayer();
 	}
 
-	document.querySelector('canvas').addEventListener('mousemove', e => {
+	function onMouseMove(e){
 		var rect = e.target.getBoundingClientRect();
 		var tileWidth = rect.width / GAME_WIDTH;
 		var tileHeight = rect.height / GAME_HEIGHT;
@@ -591,9 +600,9 @@ function getGameLogic(emit) {
 			})
 			redrawMousePreview();
 		}
+	}
 
-	});
-	document.querySelector('canvas').addEventListener('click', e => {
+	function onCanvasClick(e) {
 		if (mousePreviewX < 0 || mousePreviewY < 0 || mousePreviewX >= GAME_WIDTH || mousePreviewY >= GAME_HEIGHT || !currentRoom) {
 			return;
 		}
@@ -802,8 +811,8 @@ function getGameLogic(emit) {
 			modal.find('ul')[0].innerHTML = "<li>" + descriptions.join("</li><li>") + "</li>";
 			modal.find('.tilepos')[0].innerText = names[0];
 		}
-	});
-	document.querySelector('canvas').addEventListener('mouseout', e => {
+	}
+	function onCanvasMouseOut(e) {
 		if (mousePreviewX !== -1 && mousePreviewY !== -1) {
 			mousePreviewX = -1;
 			mousePreviewY = -1;
@@ -813,7 +822,7 @@ function getGameLogic(emit) {
 			})
 			redrawMousePreview();
 		}
-	});
+	}
 
 	setInterval(animate, 1000/60);
 
