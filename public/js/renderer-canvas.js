@@ -27,8 +27,8 @@ var CANVAS_RENDERER = (function() {
 	generalTiles.onload = () => readyGameComponent('canvas:general_tiles');
 	wallTiles.onload = () => readyGameComponent('canvas:wall_tiles');
 
-	generalTiles.src = "GeneralTiles_128.png";
-	wallTiles.src = "FoundationTiles_128.png";
+	generalTiles.src = "gfx/GeneralTiles_128.png";
+	wallTiles.src = "gfx/FoundationTiles_128.png";
 
 	function createCanvasLayer() {
 		var canvas = document.createElement('canvas');

@@ -5,6 +5,8 @@ If you've never played DROD before it might be a little tough, since the difficu
 
 You can play the game here: https://ssssss.evidentlycube.com
 
+Docker image for the game: https://hub.docker.com/repository/docker/evidentlycube/ssssss/general
+
 ## How to run it locally
 
 1. Clone the repository

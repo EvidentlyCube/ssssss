@@ -3,7 +3,7 @@
 // }
 
 function getGameLogic(emit) {
-	var audio = new Audio('notification.wav?v=2');
+	var audio = new Audio('sfx/notification.wav?v=2');
 	var queryParams = ['version=' + GAME_VERSION];
 	var myName = "Player #" + Date.now();
 

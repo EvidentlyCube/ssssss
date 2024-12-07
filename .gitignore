@@ -1,5 +1,4 @@
 .test-env
-config.json
 .history
 dist.*
 

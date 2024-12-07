@@ -27,6 +27,11 @@ app.use(cors({
 		"https://drod-online-ws.evidentlycube.com"
 	]
 }))
+var process = require('process')
+process.on('SIGINT', () => {
+  console.info("Interrupted")
+  process.exit(0)
+})
 
 
 app.use(express.static(__dirname + "/../public/"));

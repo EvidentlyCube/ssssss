@@ -3,7 +3,7 @@ const HoldLoader = require('./holdLoader/HoldLoader');
 const Room = require('./Room');
 const Utils = require('./Utils');
 
-const roomsDatabase = loadHolds(['official_levelset']);
+const roomsDatabase = loadHolds(['hold/official_levelset']);
 // const roomsDatabase = loadHolds(['test']);
 
 // HoldLoader.load(`${__dirname}/../bup.hold`);

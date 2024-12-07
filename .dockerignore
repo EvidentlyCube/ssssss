@@ -1,0 +1,12 @@
+/.git
+/.gitignore
+/.vscode
+/node_modules
+/compose
+
+/nw-builds.js
+/package-lock.json
+/README.md
+/todo.txt
+
+/Backend/node_modules

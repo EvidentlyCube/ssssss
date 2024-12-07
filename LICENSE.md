@@ -1,3 +1,13 @@
+NON-CODE ASSETS ARE RELEASED UNDER SEPARATE LICENSES, LOOK FOR `LICENSE.txt` OR
+`README.txt` IN THEIR DIRECTORIES.
+
+SOME CODE FILES CONTAIN LICENSE INFORMATION AT THE TOP. BELOW LICENSE DOES NOT
+APPLY TO THEM
+
+REMAINING CODE FILES ARE RELEASED UNDER MIT LICENSE
+
+-------------------------------------------------------------------------------
+
 Copyright (c) 2022 Maurycy Zarzycki
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
